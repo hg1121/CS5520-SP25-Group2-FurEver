@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     Button btn_login;
     private FirebaseAuth mAuth;
     ProgressBar progressBar;
-    TextView textView;
+    TextView textView, resetPassword;
 
     @Override
     public void onStart() {
@@ -54,8 +54,35 @@ public class LoginActivity extends AppCompatActivity {
         btn_login = findViewById(R.id.btn_login);
         progressBar = findViewById(R.id.progressBar);
         textView = findViewById(R.id.to_register);
+        resetPassword = findViewById(R.id.reset_password);
 
+        // reset password
+        resetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String emailAddress = editTextEmail.getText().toString().trim();
+                String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+                if(emailAddress.matches(emailPattern)){
+                    mAuth.sendPasswordResetEmail(emailAddress)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(LoginActivity.this, "Email sent, please check your email inbox", Toast.LENGTH_SHORT).show();
+                                    }else {
+                                        Toast.makeText(LoginActivity.this, "Email sent failed, check your email address ", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                }else{
+                    Toast.makeText(LoginActivity.this, "Please enter a valid email address", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
+            }
+        });
+
+        // to register
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,7 +99,6 @@ public class LoginActivity extends AppCompatActivity {
                 String email, password;
                 email = editTextEmail.getText().toString();
                 password = editTextPassword.getText().toString();
-                progressBar.setVisibility(View.VISIBLE);
 
                 if (TextUtils.isEmpty(email)){
                     Toast.makeText(LoginActivity.this, "Enter Email", Toast.LENGTH_SHORT).show();
@@ -83,6 +109,7 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
+                progressBar.setVisibility(View.VISIBLE);
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
@@ -96,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
                                     finish();
                                 } else {
                                     // If sign in fails, display a message to the user.
-                                    Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.makeText(LoginActivity.this, "Authentication failed. Check your email and password",
                                             Toast.LENGTH_SHORT).show();
                                 }
                             }
