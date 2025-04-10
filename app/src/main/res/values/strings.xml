@@ -18,4 +18,13 @@
     <string name="click_to_register">Click to register</string>
     <string name="user_details">User details</string>
     <string name="log_out">Log out</string>
+    <string name="next_question">Next Question</string>
+    <string name="finish">finish</string>
+    <string name="prev_question">Prev Question</string>
+    <string name="submit">Submit</string>
+    <string name="match_1">Match 1</string>
+    <string name="match_2">Match 2</string>
+    <string name="match_3">Match 3</string>
+    <string name="selected_dog_image">Selected Dog Image</string>
+
 </resources>

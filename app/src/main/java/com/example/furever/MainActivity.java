@@ -1,7 +1,7 @@
 package com.example.furever;
 
 import androidx.appcompat.app.AppCompatActivity;
-
+import androidx.viewpager2.widget.ViewPager2;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -19,6 +19,9 @@ public class MainActivity extends AppCompatActivity {
     FirebaseUser user;
     TextView textView;
     Button btn_logout;
+    ViewPager2 viewPager;
+    QuestionPagerAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,5 +52,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        viewPager = findViewById(R.id.viewPager);
+        adapter = new QuestionPagerAdapter(this);
+        viewPager.setAdapter(adapter);
+
+        viewPager.setPageTransformer((page, position) -> {
+            page.setAlpha(1 - Math.abs(position));
+            page.setTranslationX(-position * page.getWidth());
+        });
     }
-} 
+}
+
