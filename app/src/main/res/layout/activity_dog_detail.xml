@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <!-- Breed Image -->
+    <ImageView
+        android:id="@+id/img_breed"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/placeholder_image"
+        android:contentDescription="@string/selected_dog_image"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Breed Name -->
+    <TextView
+        android:id="@+id/tv_breed_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Breed Name"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/img_breed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp" />
+
+    <!-- Match Percentage -->
+    <TextView
+        android:id="@+id/tv_match_percent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="95% Match"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/tv_breed_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="4dp" />
+
+    <!-- Why it matches -->
+    <TextView
+        android:id="@+id/tv_why_match"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Why it matches you:\nLorem ipsum dolor sit amet, consectetur adipiscing elit."
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/tv_match_percent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="12dp" />
+
+    <!-- Care Tips -->
+    <TextView
+        android:id="@+id/tv_care_tips"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Care Tips:\nKeep it active and groom regularly."
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/tv_why_match"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="12dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

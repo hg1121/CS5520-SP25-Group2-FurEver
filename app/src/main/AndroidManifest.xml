@@ -38,6 +38,20 @@
 <!--                <category android:name="android.intent.category.LAUNCHER" />-->
 <!--            </intent-filter>-->
         </activity>
+        <activity android:name=".ResultsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".DogDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".ResultsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ResultsActivity" />
+        </activity>
+
+        <activity android:name=".PreviewActivity" android:exported="false" />
+
     </application>
 
 </manifest>

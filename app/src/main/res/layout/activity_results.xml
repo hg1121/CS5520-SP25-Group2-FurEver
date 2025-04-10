@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Title for the results screen -->
+    <TextView
+        android:id="@+id/tv_results_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your Top 3 Matches!"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <!-- First Match Row (non-clickable) -->
+    <LinearLayout
+        android:id="@+id/match_1_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <!-- Placeholder image -->
+        <ImageView
+            android:id="@+id/img_match1"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/placeholder_image"
+            android:contentDescription="@string/match_1"
+            android:layout_gravity="center_vertical" />
+
+        <!-- Breed name and match percentage -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="8dp"
+            android:layout_gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tv_match1_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Husky"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_match1_percent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="95%"
+                android:textSize="16sp"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Second Match Row -->
+    <LinearLayout
+        android:id="@+id/match_2_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:layout_marginTop="8dp">
+
+        <ImageView
+            android:id="@+id/img_match2"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/placeholder_image"
+            android:contentDescription="@string/match_2"
+            android:layout_gravity="center_vertical" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="8dp"
+            android:layout_gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tv_match2_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Golden Retriever"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_match2_percent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="88%"
+                android:textSize="16sp"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Third Match Row -->
+    <LinearLayout
+        android:id="@+id/match_3_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:layout_marginTop="8dp">
+
+        <ImageView
+            android:id="@+id/img_match3"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/placeholder_image"
+            android:contentDescription="@string/match_3"
+            android:layout_gravity="center_vertical" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="8dp"
+            android:layout_gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tv_match3_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Border Collie"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_match3_percent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="87%"
+                android:textSize="16sp"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
