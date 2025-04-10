@@ -13,11 +13,10 @@ import androidx.fragment.app.Fragment;
 
 public class Q6Fragment extends Fragment {
 
+    public Q6Fragment() { }
+
     public static Q6Fragment newInstance() {
         return new Q6Fragment();
-    }
-
-    public Q6Fragment() {
     }
 
     @Nullable
@@ -27,14 +26,16 @@ public class Q6Fragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_q6, container, false);
 
+        Button btnPrev = view.findViewById(R.id.btn_prev);
         Button btnSubmit = view.findViewById(R.id.btn_submit);
 
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ResultsActivity.class);
-                startActivity(intent);
-            }
+        btnPrev.setOnClickListener(v -> ((MainActivity) requireActivity()).goToPrevQuestion());
+
+        btnSubmit.setOnClickListener(v -> {
+            // Launch the Preview screen, for example PreviewActivity.
+            // You can also pass data if needed.
+            Intent intent = new Intent(getActivity(), PreviewActivity.class);
+            startActivity(intent);
         });
 
         return view;
