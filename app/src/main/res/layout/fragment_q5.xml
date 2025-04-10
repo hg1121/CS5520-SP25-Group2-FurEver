@@ -11,7 +11,7 @@
         android:id="@+id/tv_question"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="5. What is your preferred pet?"
+        android:text="5. Do you have children at home?"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
@@ -31,17 +31,12 @@
             android:id="@+id/radio_option1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Dog"/>
+            android:text="Yes"/>
         <RadioButton
             android:id="@+id/radio_option2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cat"/>
-        <RadioButton
-            android:id="@+id/radio_option3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Other"/>
+            android:text="No"/>
     </RadioGroup>
 
     <!-- Prev Button -->

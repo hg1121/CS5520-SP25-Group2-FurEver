@@ -11,7 +11,7 @@
         android:id="@+id/tv_question"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="3. What type of diet do you follow?"
+        android:text="3. What coat length do you prefer for a dog?"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
@@ -31,17 +31,17 @@
             android:id="@+id/radio_option1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Vegan"/>
+            android:text="Short"/>
         <RadioButton
             android:id="@+id/radio_option2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Vegetarian"/>
+            android:text="Medium"/>
         <RadioButton
             android:id="@+id/radio_option3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Non-Vegetarian"/>
+            android:text="Long"/>
     </RadioGroup>
 
     <!-- Prev Button -->

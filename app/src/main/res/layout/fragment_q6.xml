@@ -11,7 +11,7 @@
         android:id="@+id/tv_question"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="6. What is your monthly budget for pet care?"
+        android:text="6. What is your monthly budget on your dog?"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
@@ -31,17 +31,17 @@
             android:id="@+id/radio_option1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Under $50"/>
+            android:text="Under $400"/>
         <RadioButton
             android:id="@+id/radio_option2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="$50 - $100"/>
+            android:text="$400 - $600"/>
         <RadioButton
             android:id="@+id/radio_option3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Over $100"/>
+            android:text="Over $600"/>
     </RadioGroup>
 
     <!-- Prev Button -->

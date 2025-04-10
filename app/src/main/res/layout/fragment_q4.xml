@@ -11,7 +11,7 @@
         android:id="@+id/tv_question"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="4. How often do you travel?"
+        android:text="4. What type of home do you currently live in?"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
@@ -31,17 +31,22 @@
             android:id="@+id/radio_option1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Rarely"/>
+            android:text="Small Apartment (Studio / 1b)"/>
         <RadioButton
             android:id="@+id/radio_option2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Occasionally"/>
+            android:text="Large Apartment (2b+)"/>
         <RadioButton
             android:id="@+id/radio_option3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Frequently"/>
+            android:text="House with no yard"/>
+        <RadioButton
+            android:id="@+id/radio_option4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="House with yard"/>
     </RadioGroup>
 
     <!-- Prev Button -->
