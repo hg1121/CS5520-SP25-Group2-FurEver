@@ -21,14 +21,25 @@ public class DogDetailActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        imgBreed = findViewById(R.id.img_breed);
-        tvBreedName = findViewById(R.id.tv_breed_name);
-        tvMatchPercent = findViewById(R.id.tv_match_percent);
-        tvWhyMatch = findViewById(R.id.tv_why_match);
-        tvCareTips = findViewById(R.id.tv_care_tips);
-
         String breedName = getIntent().getStringExtra("BREED_NAME");
         String matchPercent = getIntent().getStringExtra("MATCH_PERCENT");
+        String whyMatch = getIntent().getStringExtra("WHY_MATCH");
+        String careTips = getIntent().getStringExtra("CARE_TIPS");
+
+        tvBreedName.setText(breedName);
+        tvMatchPercent.setText(matchPercent);
+        tvWhyMatch.setText("Why it matches you:\n" + whyMatch);
+        tvCareTips.setText("Care Tips:\n" + careTips);
+
+
+        imgBreed = findViewById(R.id.img_breed);
+//        tvBreedName = findViewById(R.id.tv_breed_name);
+//        tvMatchPercent = findViewById(R.id.tv_match_percent);
+//        tvWhyMatch = findViewById(R.id.tv_why_match);
+//        tvCareTips = findViewById(R.id.tv_care_tips);
+
+//        String breedName = getIntent().getStringExtra("BREED_NAME");
+//        String matchPercent = getIntent().getStringExtra("MATCH_PERCENT");
 
         tvBreedName.setText(breedName);
         tvMatchPercent.setText(matchPercent + " Match");

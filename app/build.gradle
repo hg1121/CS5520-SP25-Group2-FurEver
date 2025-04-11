@@ -48,6 +48,9 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
+    //引入 OkHttp 网络请求库
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:33.10.0"))
     implementation("com.google.firebase:firebase-analytics")
