@@ -77,7 +77,7 @@ public class PreviewActivity extends AppCompatActivity {
         Log.d("GenAI", "Calling OpenAI API...");
 
         OkHttpClient client = new OkHttpClient();
-        String apiKey = "sk-";  // ❗填你自己的 Key
+        String apiKey = "sk-proj--";  // 填Key
 
         JSONObject body = new JSONObject();
         try {

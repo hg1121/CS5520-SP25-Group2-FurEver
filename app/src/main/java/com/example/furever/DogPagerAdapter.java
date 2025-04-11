@@ -30,7 +30,9 @@ public class DogPagerAdapter extends RecyclerView.Adapter<DogPagerAdapter.DogVie
     @Override
     public void onBindViewHolder(@NonNull DogViewHolder holder, int position) {
         DogRecommendation dog = dogList.get(position);
+
         holder.breedName.setText(dog.breed);
+        holder.matchPercent.setText(dog.match_percent + " Match");
         holder.why.setText(dog.why);
         holder.tips.setText(dog.care_tips);
         // 可选：根据 dog.breed 显示不同图片
@@ -42,11 +44,12 @@ public class DogPagerAdapter extends RecyclerView.Adapter<DogPagerAdapter.DogVie
     }
 
     static class DogViewHolder extends RecyclerView.ViewHolder {
-        TextView breedName, why, tips;
+        TextView breedName, matchPercent, why, tips;
         ImageView image;
 
         DogViewHolder(View itemView) {
             super(itemView);
+            matchPercent = itemView.findViewById(R.id.tv_match_percent);
             breedName = itemView.findViewById(R.id.tv_breed_name);
             why = itemView.findViewById(R.id.tv_why);
             tips = itemView.findViewById(R.id.tv_tips);
