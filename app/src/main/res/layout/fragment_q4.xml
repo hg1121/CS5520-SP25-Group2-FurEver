@@ -32,22 +32,26 @@
             android:id="@+id/radio_option1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Small Apartment (Studio / 1b)"/>
+            android:text="Small Apartment (Studio / 1b)"
+            android:tag="Small_Apartment_(Studio_/_1b)"/>
         <RadioButton
             android:id="@+id/radio_option2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Large Apartment (2b+)"/>
+            android:text="Large Apartment (2b+)"
+            android:tag="Large_Apartment_(2b+)"/>
         <RadioButton
             android:id="@+id/radio_option3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="House with no yard"/>
+            android:text="House with no yard"
+            android:tag="House_with_no_yard"/>
         <RadioButton
             android:id="@+id/radio_option4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="House with yard"/>
+            android:text="House with yard"
+            android:tag="House_with_yard"/>
     </RadioGroup>
 
     <!-- Prev Button -->

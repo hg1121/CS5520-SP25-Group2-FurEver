@@ -32,17 +32,20 @@
             android:id="@+id/radio_option1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Under $400"/>
+            android:text="Under $400"
+            android:tag="Under $400"/>
         <RadioButton
             android:id="@+id/radio_option2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="$400 - $600"/>
+            android:text="$400 - $600"
+            android:tag="$400 - $600"/>
         <RadioButton
             android:id="@+id/radio_option3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Over $600"/>
+            android:text="Over $600"
+            android:tag="Over $600"/>
     </RadioGroup>
 
     <!-- Prev Button -->

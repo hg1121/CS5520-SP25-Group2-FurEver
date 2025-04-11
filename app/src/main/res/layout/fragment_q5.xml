@@ -32,12 +32,14 @@
             android:id="@+id/radio_option1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Yes"/>
+            android:text="Yes"
+            android:tag="have children"/>
         <RadioButton
             android:id="@+id/radio_option2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No"/>
+            android:text="No"
+            android:tag="not have children"/>
     </RadioGroup>
 
     <!-- Prev Button -->

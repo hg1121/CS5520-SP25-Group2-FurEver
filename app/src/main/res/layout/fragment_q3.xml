@@ -32,17 +32,20 @@
             android:id="@+id/radio_option1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Short"/>
+            android:text="Short"
+            android:tag="Short"/>
         <RadioButton
             android:id="@+id/radio_option2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Medium"/>
+            android:text="Medium"
+            android:tag="Medium"/>
         <RadioButton
             android:id="@+id/radio_option3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Long"/>
+            android:text="Long"
+            android:tag="Long"/>
     </RadioGroup>
 
     <!-- Prev Button -->

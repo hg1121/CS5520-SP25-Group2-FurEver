@@ -31,17 +31,20 @@
             android:id="@+id/radio_option1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Small: &lt; 20 lb"/>
+            android:text="Small: &lt; 20 lb"
+            android:tag="Small"/>
         <RadioButton
             android:id="@+id/radio_option2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Medium: ≈ 35 lb"/>
+            android:text="Medium: ≈ 35 lb"
+            android:tag="Medium"/>
         <RadioButton
             android:id="@+id/radio_option3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Large: &gt; 35 lb"/>
+            android:text="Large: &gt; 35 lb"
+            android:tag="Large"/>
     </RadioGroup>
 
     <Button

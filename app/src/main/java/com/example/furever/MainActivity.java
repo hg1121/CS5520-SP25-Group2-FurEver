@@ -18,6 +18,9 @@ public class MainActivity extends AppCompatActivity {
     Button btn_logout;
     private ViewPager2 viewPager;
     private QuestionPagerAdapter adapter;
+    //global instance to store dogPreference information
+    private DogPreference dogPreference = new DogPreference();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
             page.setAlpha(1 - Math.abs(position));
             page.setTranslationX(-position * page.getWidth());
         });
+    }
+    public DogPreference getDogPreference() {
+        return dogPreference;
     }
 
     public void goToNextQuestion() {
