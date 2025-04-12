@@ -30,21 +30,21 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <RadioButton
-            android:id="@+id/radio_less_than_1"
+            android:id="@+id/radio_option1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Less than 1 hour"
             android:tag="Less_than_1_hour"/>
 
         <RadioButton
-            android:id="@+id/radio_1_to_2"
+            android:id="@+id/radio_option2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1 - 2 hours"
             android:tag="1_-_2_hours"/>
 
         <RadioButton
-            android:id="@+id/radio_more_than_2"
+            android:id="@+id/radio_option3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="More than 2 hours"
