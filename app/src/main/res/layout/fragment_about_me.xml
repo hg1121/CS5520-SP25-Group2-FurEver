@@ -14,9 +14,9 @@
         android:layout_margin="16dp"
         app:cardCornerRadius="12dp"
         app:cardElevation="4dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,21 +29,34 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="30dp"
                 android:src="@drawable/dog_paw"
                 android:background="@drawable/dog_profile_background"
                 android:padding="12dp"
-                android:scaleType="centerInside"
-                android:contentDescription="Dog paw profile"/>
+                android:scaleType="centerInside"/>
+
+            <Button
+                android:id="@+id/btn_logout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#00FFFFFF"
+                android:drawableStart="@android:drawable/ic_lock_power_off"
+                android:drawablePadding="8dp"
+                android:gravity="center_vertical|center"
+                android:padding="8dp"
+                android:text="Logout"
+                android:textAllCaps="false"
+                android:textColor="#1a53ff" />
 
             <TextView
                 android:id="@+id/user_info_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:lineSpacingExtra="8dp"
                 android:text="Loading user information..."
-                android:textSize="16sp"
                 android:textColor="#555555"
-                android:lineSpacingExtra="4dp"/>
+                android:textSize="16sp"
+                android:paddingBottom="0dp" />
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -53,7 +66,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         app:cardCornerRadius="12dp"
         app:cardElevation="4dp"
         app:layout_constraintTop_toBottomOf="@id/profile_card"
@@ -66,7 +79,8 @@
             android:layout_height="wrap_content"
             android:text="Click to Get Dog Breed Recommendation"
             android:textAllCaps="true"
-            android:background="@android:color/holo_blue_light"
+            android:padding="12dp"
+            android:background="@android:color/holo_orange_light"
             android:textColor="@android:color/white"/>
     </androidx.cardview.widget.CardView>
 
@@ -76,6 +90,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="16dp"
+        android:layout_marginTop="30dp"
         app:cardCornerRadius="12dp"
         app:cardElevation="4dp"
         android:visibility="gone"
@@ -86,7 +101,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/card_gradient_background">
 
@@ -119,44 +134,29 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Based on your preferences, we've found these breeds that might be perfect for you!"
+                android:text="These are top 3 breed recommendations based on your previous preferences."
                 android:textSize="14sp"
                 android:textColor="#5D4037"
                 android:padding="12dp"
                 android:background="#FFF3E0"/>
 
-            <ScrollView
+            <LinearLayout
                 android:id="@+id/recommendations_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="16dp">
+                android:layout_height="wrap_content"
+                android:paddingTop="30dp"
+                android:paddingStart="12dp">
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/dog_recommendations_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/dog_recommendations_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:textColor="#5D4037"
-                        android:lineSpacingExtra="8dp"
-                        android:drawablePadding="8dp"/>
-
-                    <Button
-                        android:id="@+id/btn_explore_more"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Explore More Breeds"
-                        android:textAllCaps="false"
-                        android:background="@android:color/holo_orange_light"
-                        android:textColor="@android:color/white"
-                        android:layout_marginTop="16dp"
-                        android:padding="12dp"/>
-                </LinearLayout>
-            </ScrollView>
+                    android:textSize="16sp"
+                    android:textColor="#5D4037"
+                    android:lineSpacingExtra="12dp"
+                    android:drawablePadding="8dp"
+                    android:paddingBottom="16dp"/>
+            </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

@@ -139,7 +139,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             }
         }
     }
-
     
     // Helper method to save dog recommendations to Firestore
     public void saveDogRecommendationsToFirestore(String recommendations) {
