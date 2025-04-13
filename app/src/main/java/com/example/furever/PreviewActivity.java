@@ -10,10 +10,17 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -67,7 +74,8 @@ public class PreviewActivity extends AppCompatActivity {
         btnConfirm.setOnClickListener(v -> {
             progressBar.setVisibility(View.VISIBLE);
             btnConfirm.setEnabled(false);
-
+            
+            // Then call OpenAI
             String prompt = buildPrompt(dogPreference);
             callOpenAI(prompt);
         });
@@ -125,6 +133,9 @@ public class PreviewActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String content = parseContentFromJson(responseBody);
                     Log.d("GenAI", "Parsed content: " + content);
+                    
+                    // Save the GenAI recommendations to Firestore
+                    saveGenAIRecommendations(content);
 
                     Intent intent = new Intent(PreviewActivity.this, ResultsActivity.class);
                     intent.putExtra("genai_result", content);
@@ -189,5 +200,30 @@ public class PreviewActivity extends AppCompatActivity {
                         "Home Type: " + pref.homeType + "\n" +
                         "Has Children: " + pref.haveChildren + "\n" +
                         "Monthly Budget: " + pref.budget;
+    }
+
+    // save recommendations
+    private void saveGenAIRecommendations(String recommendations) {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            
+            // Create a map with the recommendation data
+            Map<String, Object> recommendationData = new HashMap<>();
+            recommendationData.put("recommendations", recommendations);
+            recommendationData.put("timestamp", new Date());
+            
+            // Save to Firestore
+            db.collection("users")
+                .document(currentUser.getUid())
+                .collection("recommendations")
+                .add(recommendationData)
+                .addOnSuccessListener(documentReference -> {
+                    Log.d("PreviewActivity", "Recommendations saved with ID: " + documentReference.getId());
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("PreviewActivity", "Error saving recommendations", e);
+                });
+        }
     }
 }

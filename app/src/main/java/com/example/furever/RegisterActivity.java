@@ -22,11 +22,13 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class RegisterActivity extends AppCompatActivity {
     TextInputEditText editTextEmail, editTextPassword;
     Button btn_register;
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
     ProgressBar progressBar;
     TextView textView;
 
@@ -48,6 +50,7 @@ public class RegisterActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_register);
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
@@ -88,24 +91,36 @@ public class RegisterActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-//                                    FirebaseUser user = mAuth.getCurrentUser();
-//                                    updateUI(user);
-                                    Toast.makeText(RegisterActivity.this, "Account Created.",
-                                            Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                                    startActivity(intent);
-                                    finish();
+                                    // Get the user from the auth result
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    
+                                    // Create a new user object
+                                    User newUser = new User(user.getUid(), user.getEmail());
+                                    
+                                    // Save the user to Firestore
+                                    db.collection("users").document(user.getUid())
+                                        .set(newUser)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(RegisterActivity.this, "Account Created.",
+                                                            Toast.LENGTH_SHORT).show();
+                                                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                } else {
+                                                    Toast.makeText(RegisterActivity.this, "Failed to save user data.",
+                                                            Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
                                 } else {
-                                    // If sign in fails, display a message to the user.
-//                                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
                                     Toast.makeText(RegisterActivity.this, "Authentication failed.",
                                             Toast.LENGTH_SHORT).show();
-//                                    updateUI(null);
                                 }
                             }
                         });
-
             }
         });
     }
