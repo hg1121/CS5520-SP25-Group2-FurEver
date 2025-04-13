@@ -75,49 +75,17 @@ public class PreviewActivity extends AppCompatActivity {
             progressBar.setVisibility(View.VISIBLE);
             btnConfirm.setEnabled(false);
             
-            // Save preferences to Firestore first
-            savePreferencesToFirestore();
-            
             // Then call OpenAI
             String prompt = buildPrompt(dogPreference);
             callOpenAI(prompt);
         });
-    }
-    
-    private void savePreferencesToFirestore() {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser != null) {
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            
-            // Create a map with the preference data
-            Map<String, Object> preferenceData = new HashMap<>();
-            preferenceData.put("size", dogPreference.size);
-            preferenceData.put("exercise", dogPreference.exercise);
-            preferenceData.put("coatLength", dogPreference.coatLength);
-            preferenceData.put("homeType", dogPreference.homeType);
-            preferenceData.put("haveChildren", dogPreference.haveChildren);
-            preferenceData.put("budget", dogPreference.budget);
-            preferenceData.put("timestamp", new Date()); // Add timestamp for ordering
-            
-            // Save to Firestore
-            db.collection("users")
-                .document(currentUser.getUid())
-                .collection("preferences")
-                .add(preferenceData)
-                .addOnSuccessListener(documentReference -> {
-                    Log.d("PreviewActivity", "Preferences saved with ID: " + documentReference.getId());
-                })
-                .addOnFailureListener(e -> {
-                    Log.e("PreviewActivity", "Error saving preferences", e);
-                });
-        }
     }
 
     private void callOpenAI(String prompt) {
         Log.d("GenAI", "Calling OpenAI API...");
 
         OkHttpClient client = new OkHttpClient();
-        String apiKey = "YOUR_API_KEY_HERE";  // TODO: Replace with your API key before testing
+        String apiKey = "sk-proj--";  // 填Key
 
         JSONObject body = new JSONObject();
         try {
@@ -234,7 +202,7 @@ public class PreviewActivity extends AppCompatActivity {
                         "Monthly Budget: " + pref.budget;
     }
 
-    // Add this new method to save GenAI recommendations
+    // save recommendations
     private void saveGenAIRecommendations(String recommendations) {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
