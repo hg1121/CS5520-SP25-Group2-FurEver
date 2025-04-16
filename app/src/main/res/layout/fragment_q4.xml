@@ -4,44 +4,50 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFF4F9"
     android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/everydaylife"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/everydaylife"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_q4"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="12dp"
+        app:layout_constraintTop_toBottomOf="@id/everydaylife"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
 
-            <TextView
-                android:id="@+id/tv_question4"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="4. What type of home do you currently live in?"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+    <TextView
+        android:id="@+id/tv_question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="4. What type of home do you currently live in?"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#4A3F4D" />
 
-            <RadioGroup
-                android:id="@+id/rg_home"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@id/tv_question4"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+    <RadioGroup
+        android:id="@+id/rg_question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="16dp">
 
                 <RadioButton
                     android:id="@+id/radio_home_small_apt"
@@ -71,46 +77,50 @@
                     android:text="House, with yard"
                     android:tag="House (with yard)" />
 
-            </RadioGroup>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RadioGroup>
+    </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <Button
-        android:id="@+id/btn_prev4"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_prev"
+        style="@style/Widget.MaterialComponents.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Prev"
+        app:icon="@drawable/ic_arrow_left"
+        app:iconPadding="8dp"
+        app:cornerRadius="32dp"
+        app:backgroundTint="@color/purple_500"
+        android:textColor="@android:color/white"
         app:layout_constraintTop_toBottomOf="@id/card_q4"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="24dp"
-        android:layout_marginStart="16dp" />
+        android:layout_marginTop="24dp" />
 
-    <Button
-        android:id="@+id/btn_next4"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_next"
+        style="@style/Widget.MaterialComponents.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Next"
+        app:icon="@drawable/ic_arrow_right"
+        app:iconPadding="8dp"
+        app:cornerRadius="32dp"
+        app:backgroundTint="@color/purple_500"
+        android:textColor="@android:color/white"
         app:layout_constraintTop_toBottomOf="@id/card_q4"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp" />
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier_q4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="btn_prev4,btn_next4" />
+        android:layout_marginTop="24dp" />
 
     <TextView
         android:id="@+id/tv_paw_tips_q4"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Paw Tips: Apartments suit smaller, lower‑energy breeds; a yard is great for high‑energy dogs!"
-        android:textSize="16sp"
+        android:text="Paw Tips: In an apartment, look for a calm, low‑energy small breed; if you have a yard, an active medium‑to‑large dog will love the space."
+        android:textSize="14sp"
         android:textStyle="italic"
+        android:textColor="#757575"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/barrier_q4"
+        app:layout_constraintTop_toBottomOf="@id/btn_prev"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

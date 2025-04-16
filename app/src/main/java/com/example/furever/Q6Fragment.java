@@ -1,3 +1,4 @@
+// Q6Fragment.java
 package com.example.furever;
 
 import android.content.Intent;
@@ -16,7 +17,7 @@ import androidx.fragment.app.Fragment;
 public class Q6Fragment extends Fragment {
     private RadioGroup rgBudget;
 
-    public Q6Fragment() { }
+    public Q6Fragment() {}
 
     public static Q6Fragment newInstance() {
         return new Q6Fragment();
@@ -30,35 +31,33 @@ public class Q6Fragment extends Fragment {
 
         rgBudget = view.findViewById(R.id.rg_budget);
 
-        view.findViewById(R.id.btn_prev6)
-                .setOnClickListener(v -> ((MainActivity) requireActivity()).goToPrevQuestion());
+        view.findViewById(R.id.btn_prev).setOnClickListener(v ->
+                ((MainActivity) requireActivity()).goToPrevQuestion()
+        );
 
+        view.findViewById(R.id.btn_submit).setOnClickListener(v -> {
+            int sel = rgBudget.getCheckedRadioButtonId();
+            String budgetVal = null;
+            if (sel != -1) {
+                RadioButton rb = rgBudget.findViewById(sel);
+                budgetVal = rb.getTag() != null
+                        ? rb.getTag().toString()
+                        : null;
+            }
+            ((MainActivity) requireActivity())
+                    .getDogPreference().budget = budgetVal;
+            Log.d("Q6Fragment", "Saved budget = " + budgetVal);
 
-        view.findViewById(R.id.btn_submit6)
-                .setOnClickListener(v -> {
-                    int selId = rgBudget.getCheckedRadioButtonId();
-                    String budgetVal = null;
-                    if (selId != -1) {
-                        RadioButton rb = rgBudget.findViewById(selId);
-                        if (rb.getTag() != null) {
-                            budgetVal = rb.getTag().toString();
-                        }
-                    }
-
-                    ((MainActivity) requireActivity())
-                            .getDogPreference().budget = budgetVal;
-                    Log.d("Q6Fragment","Saved budget = "+budgetVal);
-
-                    Intent i = new Intent(getActivity(), PreviewActivity.class);
-                    i.putExtra("dog_pref", ((MainActivity) requireActivity()).getDogPreference());
-                    startActivity(i);
-                });
+            Intent intent = new Intent(getActivity(), PreviewActivity.class);
+            intent.putExtra("dog_pref",
+                    ((MainActivity) requireActivity()).getDogPreference());
+            startActivity(intent);
+        });
 
         return view;
     }
 
-    @Override
-    public void onResume() {
+    @Override public void onResume() {
         super.onResume();
         String prev = ((MainActivity) requireActivity()).getDogPreference().budget;
         if (prev != null && rgBudget != null) {

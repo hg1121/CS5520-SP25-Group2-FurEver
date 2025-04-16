@@ -4,106 +4,116 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFF4F9"
     android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/wallet"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/wallet"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_q6"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="12dp"
+        app:layout_constraintTop_toBottomOf="@id/wallet"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:orientation="vertical"
+            android:padding="20dp">
 
             <TextView
                 android:id="@+id/tv_question6"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="6. What is your monthly budget for your dog?"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                android:textColor="#4A3F4D" />
 
             <RadioGroup
                 android:id="@+id/rg_budget"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@id/tv_question6"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                android:layout_marginTop="16dp">
 
                 <RadioButton
-                    android:id="@+id/radio_budget_under"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:buttonTint="@color/purple_500"
                     android:text="Under $400"
                     android:tag="Under $400" />
 
                 <RadioButton
-                    android:id="@+id/radio_budget_400_600"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:buttonTint="@color/purple_500"
                     android:text="$400–$600"
                     android:tag="$400–600" />
 
                 <RadioButton
-                    android:id="@+id/radio_budget_over"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:buttonTint="@color/purple_500"
                     android:text="Over $600"
                     android:tag="Over $600" />
 
             </RadioGroup>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <Button
-        android:id="@+id/btn_prev6"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_prev"
+        style="@style/Widget.MaterialComponents.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Prev"
+        app:icon="@drawable/ic_arrow_left"
+        app:iconPadding="8dp"
+        app:cornerRadius="32dp"
+        app:backgroundTint="@color/purple_500"
+        android:textColor="@android:color/white"
         app:layout_constraintTop_toBottomOf="@id/card_q6"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="24dp"
-        android:layout_marginStart="16dp" />
+        android:layout_marginTop="24dp" />
 
-    <Button
-        android:id="@+id/btn_submit6"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_submit"
+        style="@style/Widget.MaterialComponents.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Submit"
+        app:icon="@drawable/ic_arrow_right"
+        app:iconPadding="8dp"
+        app:cornerRadius="32dp"
+        app:backgroundTint="@color/purple_500"
+        android:textColor="@android:color/white"
         app:layout_constraintTop_toBottomOf="@id/card_q6"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp" />
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier_q6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="btn_prev6,btn_submit6" />
+        android:layout_marginTop="24dp" />
 
     <TextView
         android:id="@+id/tv_paw_tips_q6"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Paw Tips: Budget should cover food, vet, toys, treats and insurance. Plan for surprise vet bills!"
-        android:textSize="16sp"
+        android:text="Paw Tips: Plan for food, grooming, toys, treats and vet visits!"
+        android:textSize="14sp"
         android:textStyle="italic"
+        android:textColor="#757575"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/barrier_q6"
+        app:layout_constraintTop_toBottomOf="@id/btn_prev"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

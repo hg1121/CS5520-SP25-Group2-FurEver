@@ -4,99 +4,109 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFF4F9"
     android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/playingfetch"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/playingfetch"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_q5"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="12dp"
+        app:layout_constraintTop_toBottomOf="@id/playingfetch"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:orientation="vertical"
+            android:padding="20dp">
 
             <TextView
-                android:id="@+id/tv_question5"
-                android:layout_width="0dp"
+                android:id="@+id/tv_question"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="5. Do you have children at home?"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                android:textColor="#4A3F4D" />
 
             <RadioGroup
-                android:id="@+id/rg_children"
-                android:layout_width="0dp"
+                android:id="@+id/rg_question"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@id/tv_question5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                android:layout_marginTop="16dp">
 
                 <RadioButton
-                    android:id="@+id/radio_children_yes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:buttonTint="@color/purple_500"
                     android:text="Yes"
                     android:tag="Yes" />
 
                 <RadioButton
-                    android:id="@+id/radio_children_no"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:buttonTint="@color/purple_500"
                     android:text="No"
                     android:tag="No" />
 
             </RadioGroup>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <Button
-        android:id="@+id/btn_prev5"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_prev"
+        style="@style/Widget.MaterialComponents.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Prev"
+        app:icon="@drawable/ic_arrow_left"
+        app:iconPadding="8dp"
+        app:cornerRadius="32dp"
+        app:backgroundTint="@color/purple_500"
+        android:textColor="@android:color/white"
         app:layout_constraintTop_toBottomOf="@id/card_q5"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="24dp"
-        android:layout_marginStart="16dp" />
+        android:layout_marginTop="24dp" />
 
-    <Button
-        android:id="@+id/btn_next5"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_next"
+        style="@style/Widget.MaterialComponents.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Next"
+        app:icon="@drawable/ic_arrow_right"
+        app:iconPadding="8dp"
+        app:cornerRadius="32dp"
+        app:backgroundTint="@color/purple_500"
+        android:textColor="@android:color/white"
         app:layout_constraintTop_toBottomOf="@id/card_q5"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp" />
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier_q5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="btn_prev5,btn_next5" />
+        android:layout_marginTop="24dp" />
 
     <TextView
         android:id="@+id/tv_paw_tips_q5"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Paw Tips: Kid‑friendly breeds include Labs, Goldens, Beagles. Without kids, consider more independent companions."
-        android:textSize="16sp"
+        android:text="Paw Tips: Breeds like retrievers and poodles are great with kids."
+        android:textSize="14sp"
         android:textStyle="italic"
+        android:textColor="#757575"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/barrier_q5"
+        app:layout_constraintTop_toBottomOf="@id/btn_prev"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

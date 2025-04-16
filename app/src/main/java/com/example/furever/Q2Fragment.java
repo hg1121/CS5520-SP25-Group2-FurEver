@@ -1,11 +1,10 @@
 package com.example.furever;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -13,11 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.button.MaterialButton;
+
 public class Q2Fragment extends Fragment {
-
     private RadioGroup rgExercise;
-
-    public Q2Fragment() {}
 
     public static Q2Fragment newInstance() {
         return new Q2Fragment();
@@ -28,18 +26,22 @@ public class Q2Fragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_q2, container, false);
+
         rgExercise = view.findViewById(R.id.rg_exercise);
-        view.findViewById(R.id.btn_prev2).setOnClickListener(v ->
+        MaterialButton btnPrev = view.findViewById(R.id.btn_prev);
+        MaterialButton btnNext = view.findViewById(R.id.btn_next);
+
+        btnPrev.setOnClickListener(v ->
                 ((MainActivity) requireActivity()).goToPrevQuestion()
         );
-        view.findViewById(R.id.btn_next2).setOnClickListener(v ->
+        btnNext.setOnClickListener(v ->
                 ((MainActivity) requireActivity()).goToNextQuestion()
         );
+
         return view;
     }
 
-    @Override
-    public void onPause() {
+    @Override public void onPause() {
         super.onPause();
         if (rgExercise == null) return;
         int sel = rgExercise.getCheckedRadioButtonId();
@@ -51,8 +53,7 @@ public class Q2Fragment extends Fragment {
         ((MainActivity) requireActivity()).getDogPreference().exercise = val;
     }
 
-    @Override
-    public void onResume() {
+    @Override public void onResume() {
         super.onResume();
         String prev = ((MainActivity) requireActivity()).getDogPreference().exercise;
         if (prev != null && rgExercise != null) {
