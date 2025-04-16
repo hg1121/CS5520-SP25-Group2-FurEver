@@ -23,70 +23,44 @@ public class Q3Fragment extends Fragment {
         return new Q3Fragment();
     }
 
-    @Nullable
-    @Override
+    @Nullable @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        Log.d("Q3Fragment", "Inflating Q3 layout");
-
-        // 加载布局 / Inflate layout
         View view = inflater.inflate(R.layout.fragment_q3, container, false);
-
-        // 绑定控件 / Bind views
-        rgCoat = view.findViewById(R.id.rg_question);
-        Button btnPrev = view.findViewById(R.id.btn_prev);
-        Button btnNext = view.findViewById(R.id.btn_next);
-        Log.d("Q3Fragment", "btnNext = " + btnNext);
-
-        // 上一题 / Previous
-        btnPrev.setOnClickListener(v -> ((MainActivity) requireActivity()).goToPrevQuestion());
-
-        // 下一题（仅切换页面） / Next (only switches page)
-        btnNext.setOnClickListener(v -> {
-            Log.d("Q3Fragment", "btnNext clicked");
-            ((MainActivity) requireActivity()).goToNextQuestion();
-        });
-
+        rgCoat = view.findViewById(R.id.rg_coat);
+        view.findViewById(R.id.btn_prev3).setOnClickListener(v ->
+                ((MainActivity) requireActivity()).goToPrevQuestion()
+        );
+        view.findViewById(R.id.btn_next3).setOnClickListener(v ->
+                ((MainActivity) requireActivity()).goToNextQuestion()
+        );
         return view;
     }
 
     @Override
     public void onPause() {
         super.onPause();
-
-        if (getView() == null || rgCoat == null) return;
-
-        int selectedId = rgCoat.getCheckedRadioButtonId();
-        String value = null;
-
-        if (selectedId != -1) {
-            RadioButton selected = rgCoat.findViewById(selectedId);
-            if (selected != null && selected.getTag() != null) {
-                value = selected.getTag().toString();
-            }
+        if (rgCoat == null) return;
+        int sel = rgCoat.getCheckedRadioButtonId();
+        String val = null;
+        if (sel != -1) {
+            RadioButton rb = rgCoat.findViewById(sel);
+            val = rb.getTag() != null ? rb.getTag().toString() : null;
         }
-
-        ((MainActivity) requireActivity()).getDogPreference().coatLength = value;
-        Log.d("Q3Fragment", "Saved coatLength = " + value);
+        ((MainActivity) requireActivity()).getDogPreference().coatLength = val;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        if (getView() == null || rgCoat == null) return;
-
         String prev = ((MainActivity) requireActivity()).getDogPreference().coatLength;
-        if (prev != null) {
+        if (prev != null && rgCoat != null) {
             for (int i = 0; i < rgCoat.getChildCount(); i++) {
-                View child = rgCoat.getChildAt(i);
-                if (child instanceof RadioButton) {
-                    RadioButton rb = (RadioButton) child;
-                    if (prev.equals(rb.getTag())) {
-                        rb.setChecked(true);
-                        break;
-                    }
+                View c = rgCoat.getChildAt(i);
+                if (c instanceof RadioButton && prev.equals(c.getTag())) {
+                    ((RadioButton)c).setChecked(true);
+                    break;
                 }
             }
         }

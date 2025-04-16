@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -15,83 +14,59 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 public class Q6Fragment extends Fragment {
-
     private RadioGroup rgBudget;
 
-    public Q6Fragment() {}
+    public Q6Fragment() { }
 
     public static Q6Fragment newInstance() {
         return new Q6Fragment();
     }
 
-    @Nullable
-    @Override
+    @Nullable @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
-        // 加载布局 / Inflate layout
         View view = inflater.inflate(R.layout.fragment_q6, container, false);
 
-        // 绑定控件 / Bind views
-        rgBudget = view.findViewById(R.id.rg_question);
-        Button btnPrev = view.findViewById(R.id.btn_prev);
-        Button btnSubmit = view.findViewById(R.id.btn_submit);
+        rgBudget = view.findViewById(R.id.rg_budget);
 
-        Log.d("Q6Fragment", "btnSubmit = " + btnSubmit);
+        view.findViewById(R.id.btn_prev6)
+                .setOnClickListener(v -> ((MainActivity) requireActivity()).goToPrevQuestion());
 
-        // 上一题 / Go to previous question
-        btnPrev.setOnClickListener(v -> ((MainActivity) requireActivity()).goToPrevQuestion());
 
-        // 提交 / Submit and jump to PreviewActivity
-        btnSubmit.setOnClickListener(v -> {
-            Log.d("Q6Fragment", "btnSubmit clicked");
+        view.findViewById(R.id.btn_submit6)
+                .setOnClickListener(v -> {
+                    int selId = rgBudget.getCheckedRadioButtonId();
+                    String budgetVal = null;
+                    if (selId != -1) {
+                        RadioButton rb = rgBudget.findViewById(selId);
+                        if (rb.getTag() != null) {
+                            budgetVal = rb.getTag().toString();
+                        }
+                    }
 
-            // 保存动作已放在 onPause，这里只跳转即可 / Save is done in onPause
-            Intent intent = new Intent(getActivity(), PreviewActivity.class);
-            intent.putExtra("dog_pref", ((MainActivity) requireActivity()).getDogPreference());
-            startActivity(intent);
-        });
+                    ((MainActivity) requireActivity())
+                            .getDogPreference().budget = budgetVal;
+                    Log.d("Q6Fragment","Saved budget = "+budgetVal);
+
+                    Intent i = new Intent(getActivity(), PreviewActivity.class);
+                    i.putExtra("dog_pref", ((MainActivity) requireActivity()).getDogPreference());
+                    startActivity(i);
+                });
 
         return view;
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-
-        if (getView() == null || rgBudget == null) return;
-
-        int selectedId = rgBudget.getCheckedRadioButtonId();
-        String value = null;
-
-        if (selectedId != -1) {
-            RadioButton selected = rgBudget.findViewById(selectedId);
-            if (selected != null && selected.getTag() != null) {
-                value = selected.getTag().toString();
-            }
-        }
-
-        ((MainActivity) requireActivity()).getDogPreference().budget = value;
-        Log.d("Q6Fragment", "Saved budget = " + value);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
-
-        if (getView() == null || rgBudget == null) return;
-
         String prev = ((MainActivity) requireActivity()).getDogPreference().budget;
-        if (prev != null) {
+        if (prev != null && rgBudget != null) {
             for (int i = 0; i < rgBudget.getChildCount(); i++) {
-                View child = rgBudget.getChildAt(i);
-                if (child instanceof RadioButton) {
-                    RadioButton rb = (RadioButton) child;
-                    if (prev.equals(rb.getTag())) {
-                        rb.setChecked(true);
-                        break;
-                    }
+                View c = rgBudget.getChildAt(i);
+                if (c instanceof RadioButton && prev.equals(c.getTag())) {
+                    ((RadioButton)c).setChecked(true);
+                    break;
                 }
             }
         }

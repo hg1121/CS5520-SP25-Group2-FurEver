@@ -28,63 +28,38 @@ public class Q1Fragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
-        // 加载布局 / Inflate layout
         View view = inflater.inflate(R.layout.fragment_q1, container, false);
-
-        // 绑定控件 / Bind views
-        rgSize = view.findViewById(R.id.rg_question);
-        Button btnNext = view.findViewById(R.id.btn_next);
-
-        Log.d("Q1Fragment", "btnNext = " + btnNext);
-
-        // 下一题按钮仅切换页面，不负责保存 / Next button only switches page
-        btnNext.setOnClickListener(v -> {
-            Log.d("Q1Fragment", "btnNext clicked");
-            ((MainActivity) requireActivity()).goToNextQuestion();
-        });
-
+        rgSize = view.findViewById(R.id.rg_size);
+        Button btnNext = view.findViewById(R.id.btn_next1);
+        btnNext.setOnClickListener(v ->
+                ((MainActivity) requireActivity()).goToNextQuestion()
+        );
         return view;
     }
 
     @Override
     public void onPause() {
         super.onPause();
-
-        // 离开页面时保存当前选项 / Save selected value when leaving the page
-        if (getView() == null || rgSize == null) return;
-
-        int selectedId = rgSize.getCheckedRadioButtonId();
-        String value = null;
-
-        if (selectedId != -1) {
-            RadioButton selected = rgSize.findViewById(selectedId);
-            if (selected != null && selected.getTag() != null) {
-                value = selected.getTag().toString();
-            }
+        if (rgSize == null) return;
+        int sel = rgSize.getCheckedRadioButtonId();
+        String val = null;
+        if (sel != -1) {
+            RadioButton rb = rgSize.findViewById(sel);
+            val = rb.getTag() != null ? rb.getTag().toString() : null;
         }
-
-        ((MainActivity) requireActivity()).getDogPreference().size = value;
-        Log.d("Q1Fragment", "Saved size = " + value);
+        ((MainActivity) requireActivity()).getDogPreference().size = val;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        // 回到页面时自动恢复之前选择 / Restore previous selection
-        if (getView() == null || rgSize == null) return;
-
         String prev = ((MainActivity) requireActivity()).getDogPreference().size;
-        if (prev != null) {
+        if (prev != null && rgSize != null) {
             for (int i = 0; i < rgSize.getChildCount(); i++) {
-                View child = rgSize.getChildAt(i);
-                if (child instanceof RadioButton) {
-                    RadioButton rb = (RadioButton) child;
-                    if (prev.equals(rb.getTag())) {
-                        rb.setChecked(true);
-                        break;
-                    }
+                View c = rgSize.getChildAt(i);
+                if (c instanceof RadioButton && prev.equals(c.getTag())) {
+                    ((RadioButton)c).setChecked(true);
+                    break;
                 }
             }
         }
