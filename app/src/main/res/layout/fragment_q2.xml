@@ -6,69 +6,105 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <!-- Question Text -->
-    <TextView
-        android:id="@+id/tv_question"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_q2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="2. How many hours per day do you plan to exercise?"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- RadioGroup for options -->
-    <RadioGroup
-        android:id="@+id/rg_exercise"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/tv_question"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <RadioButton
-            android:id="@+id/radio_less_than_1"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Less than 1 hour"
-            android:tag="Less_than_1_hour"/>
+            android:padding="16dp">
 
-        <RadioButton
-            android:id="@+id/radio_1_to_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1 - 2 hours"
-            android:tag="1_-_2_hours"/>
+            <TextView
+                android:id="@+id/tv_question2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="2. How many hours per day do you plan to exercise?"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
-        <RadioButton
-            android:id="@+id/radio_more_than_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="More than 2 hours"
-            android:tag="More_than_2_hours"/>
-    </RadioGroup>
+            <RadioGroup
+                android:id="@+id/rg_exercise"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_question2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
-    <!-- Prev Button -->
+                <RadioButton
+                    android:id="@+id/radio_ex_less"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Less than 1 hour"
+                    android:tag="&lt;1 hr" />
+
+                <RadioButton
+                    android:id="@+id/radio_ex_one_to_two"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1–2 hours"
+                    android:tag="1–2 hr" />
+
+                <RadioButton
+                    android:id="@+id/radio_ex_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="More than 2 hours"
+                    android:tag="&gt;2 hr" />
+
+            </RadioGroup>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
     <Button
-        android:id="@+id/btn_prev"
+        android:id="@+id/btn_prev2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Prev"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/card_q2"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_margin="16dp" />
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp" />
 
-    <!-- Next Button -->
     <Button
-        android:id="@+id/btn_next"
+        android:id="@+id/btn_next2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Next"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/card_q2"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="16dp" />
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_q2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="btn_prev2,btn_next2" />
+
+    <TextView
+        android:id="@+id/tv_paw_tips_q2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Paw Tips: Less active breeds do fine with &lt;1 hr. High‑energy dogs need 1–2 hr, working dogs may enjoy &gt;2 hr!"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/barrier_q2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

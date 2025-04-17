@@ -57,7 +57,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         private ImageView userImage;
         private TextView userName;
         private TextView postTime;
-        private ImageView postImage;
         private TextView breedText;
         private TextView sexText;
         private TextView ageText;
@@ -68,7 +67,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             userImage = itemView.findViewById(R.id.userImage);
             userName = itemView.findViewById(R.id.userName);
             postTime = itemView.findViewById(R.id.postTime);
-            postImage = itemView.findViewById(R.id.postImage);
             breedText = itemView.findViewById(R.id.breedText);
             sexText = itemView.findViewById(R.id.sexText);
             ageText = itemView.findViewById(R.id.ageText);
@@ -96,16 +94,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                     .load(R.drawable.default_profile)
                     .circleCrop()
                     .into(userImage);
-
-            // Load post image
-            if (post.getImageUrl() != null && !post.getImageUrl().isEmpty()) {
-                Glide.with(itemView.getContext())
-                        .load(post.getImageUrl())
-                        .into(postImage);
-                postImage.setVisibility(View.VISIBLE);
-            } else {
-                postImage.setVisibility(View.GONE);
-            }
         }
     }
 } 

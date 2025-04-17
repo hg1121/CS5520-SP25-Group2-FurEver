@@ -28,66 +28,40 @@ public class Q4Fragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
-        Log.d("Q4Fragment", "onCreateView: Q4 fragment is being created");
         View view = inflater.inflate(R.layout.fragment_q4, container, false);
-
-        // 绑定控件 / Bind views
-        rgHome = view.findViewById(R.id.rg_question);
-        Button btnPrev = view.findViewById(R.id.btn_prev);
-        Button btnNext = view.findViewById(R.id.btn_next);
-
-        Log.d("Q4Fragment", "btnNext = " + btnNext);
-
-        // 上一页
-        btnPrev.setOnClickListener(v -> ((MainActivity) requireActivity()).goToPrevQuestion());
-
-        // 下一页（不保存数据）
-        btnNext.setOnClickListener(v -> {
-            Log.d("Q4Fragment", "btnNext clicked");
-            ((MainActivity) requireActivity()).goToNextQuestion();
-        });
-
-        Log.d("Q4Fragment", "onCreateView end reached");
+        rgHome = view.findViewById(R.id.rg_home);
+        view.findViewById(R.id.btn_prev4).setOnClickListener(v ->
+                ((MainActivity) requireActivity()).goToPrevQuestion()
+        );
+        view.findViewById(R.id.btn_next4).setOnClickListener(v ->
+                ((MainActivity) requireActivity()).goToNextQuestion()
+        );
         return view;
     }
 
     @Override
     public void onPause() {
         super.onPause();
-
-        if (getView() == null || rgHome == null) return;
-
-        int selectedId = rgHome.getCheckedRadioButtonId();
-        String value = null;
-
-        if (selectedId != -1) {
-            RadioButton selected = rgHome.findViewById(selectedId);
-            if (selected != null && selected.getTag() != null) {
-                value = selected.getTag().toString();
-            }
+        if (rgHome == null) return;
+        int sel = rgHome.getCheckedRadioButtonId();
+        String val = null;
+        if (sel != -1) {
+            RadioButton rb = rgHome.findViewById(sel);
+            val = rb.getTag() != null ? rb.getTag().toString() : null;
         }
-
-        ((MainActivity) requireActivity()).getDogPreference().homeType = value;
-        Log.d("Q4Fragment", "Saved homeType = " + value);
+        ((MainActivity) requireActivity()).getDogPreference().homeType = val;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        if (getView() == null || rgHome == null) return;
-
         String prev = ((MainActivity) requireActivity()).getDogPreference().homeType;
-        if (prev != null) {
+        if (prev != null && rgHome != null) {
             for (int i = 0; i < rgHome.getChildCount(); i++) {
-                View child = rgHome.getChildAt(i);
-                if (child instanceof RadioButton) {
-                    RadioButton rb = (RadioButton) child;
-                    if (prev.equals(rb.getTag())) {
-                        rb.setChecked(true);
-                        break;
-                    }
+                View c = rgHome.getChildAt(i);
+                if (c instanceof RadioButton && prev.equals(c.getTag())) {
+                    ((RadioButton)c).setChecked(true);
+                    break;
                 }
             }
         }

@@ -1,31 +1,28 @@
 package com.example.furever;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class Post implements Serializable {
+public class Post {
     private String id;
     private String userId;
     private String userName;
+    private Date timestamp;
     private String breed;
     private String sex;
     private String age;
     private String description;
-    private String imageUrl;
-    private Date timestamp;
 
-    // Required empty constructor for Firebase
+    // Empty constructor required for Firestore
     public Post() {
     }
 
-    public Post(String userId, String userName, String breed, String sex, String age, String description, String imageUrl) {
+    public Post(String userId, String userName, String breed, String sex, String age, String description) {
         this.userId = userId;
         this.userName = userName;
         this.breed = breed;
         this.sex = sex;
         this.age = age;
         this.description = description;
-        this.imageUrl = imageUrl;
         this.timestamp = new Date();
     }
 
@@ -52,6 +49,14 @@ public class Post implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getBreed() {
@@ -84,21 +89,5 @@ public class Post implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public Date getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
     }
 } 
