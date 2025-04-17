@@ -57,6 +57,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.firebase:firebase-firestore'
     implementation 'com.google.firebase:firebase-storage'
+    
+    // Add explicit Google Play Services dependency
+    implementation 'com.google.android.gms:play-services-auth:20.7.0'
 
     // Testing dependencies
     testImplementation 'junit:junit:4.13.2'

@@ -1,7 +1,9 @@
 package com.example.furever;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +24,12 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class PostsFragment extends Fragment implements PostAdapter.OnPostClickListener {
+    private static final String TAG = "PostsFragment";
 
     private RecyclerView recyclerView;
     private PostAdapter adapter;
@@ -69,34 +74,139 @@ public class PostsFragment extends Fragment implements PostAdapter.OnPostClickLi
     }
 
     private void loadPosts() {
-        progressBar.setVisibility(View.VISIBLE);
+        // Check if fragment is attached to activity
+        Context context = getContext();
+        if (context == null) {
+            return;
+        }
+
+        if (progressBar != null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
 
         db.collection("posts")
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!isAdded()) {
+                        return;
+                    }
+
                     List<Post> posts = new ArrayList<>();
+                    
+                    // Add user posts
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         Post post = document.toObject(Post.class);
                         post.setId(document.getId());
                         posts.add(post);
                     }
-                    adapter.setPosts(posts);
-                    progressBar.setVisibility(View.GONE);
-                    swipeRefresh.setRefreshing(false);
+
+                    // Add sample posts
+                    List<Post> samplePosts = getSamplePosts();
+                    posts.addAll(samplePosts);
+
+                    if (adapter != null) {
+                        adapter.setPosts(posts);
+                    }
+
+                    if (progressBar != null) {
+                        progressBar.setVisibility(View.GONE);
+                    }
+
+                    if (swipeRefresh != null) {
+                        swipeRefresh.setRefreshing(false);
+                    }
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(getContext(), "Error loading posts: " + e.getMessage(),
-                            Toast.LENGTH_SHORT).show();
-                    progressBar.setVisibility(View.GONE);
-                    swipeRefresh.setRefreshing(false);
+                    Log.e(TAG, "Error loading posts: ", e);
+                    if (!isAdded()) {
+                        return;
+                    }
+
+                    Context ctx = getContext();
+                    if (ctx != null) {
+                        Toast.makeText(ctx, "Error loading posts: " + e.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+
+                    if (progressBar != null) {
+                        progressBar.setVisibility(View.GONE);
+                    }
+
+                    if (swipeRefresh != null) {
+                        swipeRefresh.setRefreshing(false);
+                    }
                 });
+    }
+
+    private List<Post> getSamplePosts() {
+        List<Post> samplePosts = Arrays.asList(
+            new Post(
+                "sample_user_1",
+                "Sarah Johnson",
+                "Golden Retriever",
+                "Female",
+                "Young (1-3 years)",
+                "Looking for a loving home for Luna, a friendly and energetic Golden Retriever. " +
+                "She's great with kids and other dogs. Fully vaccinated and trained."
+            ),
+            new Post(
+                "sample_user_2",
+                "Mike Wilson",
+                "German Shepherd",
+                "Male",
+                "Puppy (0-1 year)",
+                "Max is a 6-month-old German Shepherd puppy looking for an active family. " +
+                "He's already showing great potential in basic training and loves to learn."
+            ),
+            new Post(
+                "sample_user_3",
+                "Emily Chen",
+                "French Bulldog",
+                "Male",
+                "Adult (3-7 years)",
+                "Meet Charlie, a calm and affectionate Frenchie who loves cuddles. " +
+                "Perfect for apartment living and great with families."
+            ),
+            new Post(
+                "sample_user_4",
+                "David Brown",
+                "Labrador Retriever",
+                "Female",
+                "Senior (7+ years)",
+                "Sweet senior Lab named Bella seeking a quiet home to spend her golden years. " +
+                "Well-behaved and gentle with everyone she meets."
+            ),
+            new Post(
+                "sample_user_5",
+                "Lisa Martinez",
+                "Border Collie",
+                "Male",
+                "Young (1-3 years)",
+                "Cooper is a highly intelligent Border Collie looking for an active home. " +
+                "Great for agility training and outdoor activities."
+            )
+        );
+
+        // Set IDs and timestamps for sample posts
+        for (int i = 0; i < samplePosts.size(); i++) {
+            Post post = samplePosts.get(i);
+            post.setId("sample_post_" + (i + 1));
+            post.setTimestamp(new Date(System.currentTimeMillis() - (i * 86400000L))); // Spread over last few days
+        }
+
+        return samplePosts;
     }
 
     @Override
     public void onPostClick(Post post) {
-        Intent intent = new Intent(getContext(), PostDetailActivity.class);
-        intent.putExtra(PostDetailActivity.EXTRA_POST_ID, post.getId());
-        startActivity(intent);
+        Context context = getContext();
+        if (context != null && post != null) {
+            Intent intent = new Intent(context, PostDetailActivity.class);
+            intent.putExtra(PostDetailActivity.EXTRA_POST_ID, post.getId());
+            // Add flag to indicate if this is a sample post
+            intent.putExtra("IS_SAMPLE_POST", post.getId().startsWith("sample_post_"));
+            startActivity(intent);
+        }
     }
 } 
