@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -204,9 +205,47 @@ public class PostsFragment extends Fragment implements PostAdapter.OnPostClickLi
         if (context != null && post != null) {
             Intent intent = new Intent(context, PostDetailActivity.class);
             intent.putExtra(PostDetailActivity.EXTRA_POST_ID, post.getId());
-            // Add flag to indicate if this is a sample post
             intent.putExtra("IS_SAMPLE_POST", post.getId().startsWith("sample_post_"));
             startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onUserImageClick(String userId, String userName) {
+        if (userId == null || userId.startsWith("sample_user_")) {
+            // Show sample user email
+            showUserEmailDialog(userName, userName.toLowerCase().replace(" ", ".") + "@example.com");
+            return;
+        }
+
+        // For real users, fetch their email from Firestore
+        db.collection("users")
+            .document(userId)
+            .get()
+            .addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    User user = documentSnapshot.toObject(User.class);
+                    if (user != null && user.getEmail() != null) {
+                        showUserEmailDialog(userName, user.getEmail());
+                    }
+                }
+            })
+            .addOnFailureListener(e -> {
+                Log.e(TAG, "Error fetching user data", e);
+                if (getContext() != null) {
+                    Toast.makeText(getContext(), "Error fetching user information", Toast.LENGTH_SHORT).show();
+                }
+            });
+    }
+
+    private void showUserEmailDialog(String userName, String email) {
+        Context context = getContext();
+        if (context != null) {
+            new AlertDialog.Builder(context)
+                .setTitle(userName + "'s Contact")
+                .setMessage("Email: " + email)
+                .setPositiveButton("OK", null)
+                .show();
         }
     }
 } 

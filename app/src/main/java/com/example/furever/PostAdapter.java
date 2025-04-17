@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,13 +21,16 @@ import java.util.Locale;
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
     private List<Post> posts = new ArrayList<>();
     private OnPostClickListener listener;
+    private FirebaseFirestore db;
 
     public interface OnPostClickListener {
         void onPostClick(Post post);
+        void onUserImageClick(String userId, String userName);
     }
 
     public PostAdapter(OnPostClickListener listener) {
         this.listener = listener;
+        this.db = FirebaseFirestore.getInstance();
     }
 
     @NonNull
@@ -76,6 +80,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
                     listener.onPostClick(posts.get(position));
+                }
+            });
+
+            userImage.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    Post post = posts.get(position);
+                    listener.onUserImageClick(post.getUserId(), post.getUserName());
                 }
             });
         }

@@ -58,6 +58,13 @@ public class PostDetailActivity extends AppCompatActivity {
         ageText = findViewById(R.id.ageText);
         descriptionText = findViewById(R.id.descriptionText);
 
+        // Setup user image click listener
+        userImage.setOnClickListener(v -> {
+            if (currentPost != null) {
+                showUserEmailDialog();
+            }
+        });
+
         // Get post ID from intent
         postId = getIntent().getStringExtra(EXTRA_POST_ID);
         if (postId != null) {
@@ -221,5 +228,39 @@ public class PostDetailActivity extends AppCompatActivity {
                     Toast.makeText(this, "Error deleting post: " + e.getMessage(), 
                         Toast.LENGTH_SHORT).show();
                 });
+    }
+
+    private void showUserEmailDialog() {
+        if (currentPost.getUserId().startsWith("sample_user_")) {
+            // Show sample user email
+            String email = currentPost.getUserName().toLowerCase().replace(" ", ".") + "@example.com";
+            showEmailDialog(currentPost.getUserName(), email);
+            return;
+        }
+
+        // For real users, fetch their email from Firestore
+        db.collection("users")
+            .document(currentPost.getUserId())
+            .get()
+            .addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    User user = documentSnapshot.toObject(User.class);
+                    if (user != null && user.getEmail() != null) {
+                        showEmailDialog(currentPost.getUserName(), user.getEmail());
+                    }
+                }
+            })
+            .addOnFailureListener(e -> {
+                Log.e(TAG, "Error fetching user data", e);
+                Toast.makeText(this, "Error fetching user information", Toast.LENGTH_SHORT).show();
+            });
+    }
+
+    private void showEmailDialog(String userName, String email) {
+        new AlertDialog.Builder(this)
+            .setTitle(userName + "'s Contact")
+            .setMessage("Email: " + email)
+            .setPositiveButton("OK", null)
+            .show();
     }
 } 
