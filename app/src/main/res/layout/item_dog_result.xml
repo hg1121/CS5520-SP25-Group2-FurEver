@@ -1,64 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp"
-    android:gravity="center_horizontal">
+    android:background="#F8F8F8"
+    android:padding="16dp">
 
-    <ImageView
-        android:id="@+id/img_dog"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:src="@drawable/placeholder_image"
-        android:layout_marginBottom="16dp" />
-
-    <TextView
-        android:id="@+id/tv_breed_name"
-        android:layout_width="wrap_content"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_container"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Beagle"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="16dp" />
+        app:cardCornerRadius="24dp"
+        app:cardElevation="8dp"
+        app:cardUseCompatPadding="true"
+        android:backgroundTint="#FFFFFF"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <TextView
-        android:id="@+id/tv_match_percent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="95% Match"
-        android:textSize="16sp"
-        android:textColor="#FF8800"
-        android:layout_marginBottom="16dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:gravity="center_horizontal">
 
-    <TextView
-        android:id="@+id/tv_why_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Why This Breed"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:layout_marginTop="8dp" />
+            <ImageView
+                android:id="@+id/img_dog"
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                android:layout_marginBottom="16dp"
+                android:scaleType="centerCrop"
+                android:background="@drawable/rounded_image_background"
+                android:src="@drawable/placeholder_image" />
 
-    <TextView
-        android:id="@+id/tv_why"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Recommended because..."
-        android:layout_marginBottom="16dp" />
+            <TextView
+                android:id="@+id/tv_breed_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Golden Retriever"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="#222222"
+                android:layout_marginBottom="8dp" />
 
-    <TextView
-        android:id="@+id/tv_tips_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Care Tips"
-        android:textStyle="bold"
-        android:textSize="16sp" />
+            <TextView
+                android:id="@+id/tv_match_percent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="95% Match"
+                android:textSize="15sp"
+                android:textColor="#FF9500"
+                android:layout_marginBottom="20dp" />
 
-    <TextView
-        android:id="@+id/tv_tips"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Groom daily, avoid heat, etc." />
-</LinearLayout>
+            <TextView
+                android:id="@+id/tv_why_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="✨ Why This Breed"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="#333333"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/tv_why"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Because it's super friendly and fits your active lifestyle."
+                android:textColor="#666666"
+                android:textSize="15sp"
+                android:layout_marginBottom="20dp" />
+
+            <TextView
+                android:id="@+id/tv_tips_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="🩺 Care Tips"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="#333333"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/tv_tips"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Groom daily, avoid heat, loves space to run, etc."
+                android:textColor="#666666"
+                android:textSize="15sp"
+                android:layout_marginBottom="8dp" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

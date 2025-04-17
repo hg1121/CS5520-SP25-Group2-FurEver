@@ -13,7 +13,37 @@
         app:layout_constraintBottom_toTopOf="@id/btn_done"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
-        
+
+    <!-- 左箭头提示 -->
+    <ImageView
+        android:id="@+id/arrow_left"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp"
+        android:alpha="0.4"
+        android:src="@drawable/ic_arrow_left"
+        android:contentDescription="Swipe Left"
+        android:clickable="false"
+        android:focusable="false"
+        app:layout_constraintTop_toTopOf="@id/view_pager"
+        app:layout_constraintBottom_toBottomOf="@id/view_pager"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- 右箭头提示 -->
+    <ImageView
+        android:id="@+id/arrow_right"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="8dp"
+        android:alpha="0.4"
+        android:src="@drawable/ic_arrow_right"
+        android:contentDescription="Swipe Right"
+        android:clickable="false"
+        android:focusable="false"
+        app:layout_constraintTop_toTopOf="@id/view_pager"
+        app:layout_constraintBottom_toBottomOf="@id/view_pager"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <Button
         android:id="@+id/btn_done"
         android:layout_width="0dp"
