@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,6 +21,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -85,17 +85,12 @@ public class PreviewActivity extends AppCompatActivity {
     private void callOpenAI(String prompt) {
         Log.d("GenAI", "Calling OpenAI API...");
 
-        OkHttpClient client = new OkHttpClient();
-        // TODO: Replace with your actual API key management solution
-        String apiKey = "YOUR_API_KEY";  // This is a placeholder. DO NOT commit actual API key.
-
-        // For development only - you should implement proper API key management
-        if (apiKey.equals("YOUR_API_KEY")) {
-            Toast.makeText(this, "Please configure your OpenAI API key", Toast.LENGTH_LONG).show();
-            progressBar.setVisibility(View.GONE);
-            btnConfirm.setEnabled(true);
-            return;
-        }
+        OkHttpClient client = new OkHttpClient.Builder()
+                .callTimeout(10, TimeUnit.SECONDS)
+                .connectTimeout(5, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .build();
+        String apiKey = "sk-proj--";  // 填Key
 
         JSONObject body = new JSONObject();
         try {
@@ -143,15 +138,58 @@ public class PreviewActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String content = parseContentFromJson(responseBody);
                     Log.d("GenAI", "Parsed content: " + content);
-                    
-                    // Save the GenAI recommendations to Firestore
+
+                    // Save recommendation to Firestore
                     saveGenAIRecommendations(content);
 
-                    Intent intent = new Intent(PreviewActivity.this, ResultsActivity.class);
-                    intent.putExtra("genai_result", content);
-                    intent.putExtra("dog_pref", dogPreference);
-                    startActivity(intent);
-                    finish();
+                    // 拉取头像路径
+                    JSONArray breedArray = parseBreedList(content);
+                    String[] breedNames = new String[3];
+                    String[] imagePaths = new String[3];
+
+                    for (int i = 0; i < 3; i++) {
+                        try {
+                            JSONObject obj = breedArray.getJSONObject(i);
+                            breedNames[i] = obj.getString("breed");
+                        } catch (Exception e) {
+                            breedNames[i] = "unknown";
+                        }
+                    }
+
+                    final int[] finishedCount = {0};
+                    for (int i = 0; i < 3; i++) {
+                        int index = i;
+                        DogImageUtil.getDogImage(PreviewActivity.this, breedNames[i], new DogImageUtil.ImageDownloadCallback() {
+                            @Override
+                            public void onSuccess(String localPath) {
+                                Log.d("DogImageUtil", "✅ Image downloaded: " + localPath);
+                                imagePaths[index] = localPath;
+                                checkAndProceed();
+                            }
+                            @Override
+                            public void onFailure(String error) {
+                                Log.e("PreviewActivity", "头像获取失败：" + error);
+                                imagePaths[index] = ""; // fallback 值
+                                checkAndProceed(); // ✅ 关键：失败也要调用
+                            }
+
+                            private void checkAndProceed() {
+                                finishedCount[0]++;
+                                if (finishedCount[0] == 3) {
+                                    // 三个头像都处理完后再跳转页面
+                                    Intent intent = new Intent(PreviewActivity.this, ResultsActivity.class);
+                                    intent.putExtra("genai_result", content);
+                                    intent.putExtra("dog_pref", dogPreference);
+                                    intent.putExtra("breed_image_0", imagePaths[0]);
+                                    intent.putExtra("breed_image_1", imagePaths[1]);
+                                    intent.putExtra("breed_image_2", imagePaths[2]);
+                                    Log.d("DebugPayload", "genai_result length = " + content.length());
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }
+                        });
+                    }
                 } else {
                     Log.e("GenAI", "Unsuccessful response: " + responseBody);
                     runOnUiThread(() -> {
@@ -234,6 +272,16 @@ public class PreviewActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> {
                     Log.e("PreviewActivity", "Error saving recommendations", e);
                 });
+        }
+    }
+
+    //解析推荐 JSON  parse JSON
+    private JSONArray parseBreedList(String json) {
+        try {
+            return new JSONArray(json); // json 是 OpenAI 返回的 structured JSON array
+        } catch (Exception e) {
+            Log.e("ParseBreedList", "JSON error: " + e.getMessage());
+            return new JSONArray();
         }
     }
 }

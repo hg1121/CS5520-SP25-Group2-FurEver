@@ -1,14 +1,17 @@
 package com.example.furever;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.File;
 import java.util.List;
 
 public class DogPagerAdapter extends RecyclerView.Adapter<DogPagerAdapter.DogViewHolder> {
@@ -35,7 +38,20 @@ public class DogPagerAdapter extends RecyclerView.Adapter<DogPagerAdapter.DogVie
         holder.matchPercent.setText(dog.match_percent + " Match");
         holder.why.setText(dog.why);
         holder.tips.setText(dog.care_tips);
-        // 可选：根据 dog.breed 显示不同图片
+
+        // 加载头像图（来自本地路径）
+        String path = dog.imagePath;
+        Log.d("DogPagerAdapter", "Image path for " + dog.breed + ": " + path);
+        if (path != null && !path.isEmpty()) {
+            Glide.with(holder.itemView.getContext())
+                    .load(new File(path))
+                    .placeholder(R.drawable.placeholder_image)
+                    .transform(new RoundedCorners(32))
+                    .into(holder.image);
+        } else {
+            // fallback 默认图
+            holder.image.setImageResource(R.drawable.placeholder_image); // 或 R.raw.default_dog
+        }
     }
 
     @Override
