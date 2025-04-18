@@ -30,6 +30,11 @@ public class LoginActivity extends AppCompatActivity {
     ProgressBar progressBar;
     TextView textView, resetPassword;
 
+    public LoginActivity() {
+        // Initialize Firebase Auth in constructor
+        mAuth = FirebaseAuth.getInstance();
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -48,7 +53,6 @@ public class LoginActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
 
-        mAuth = FirebaseAuth.getInstance();
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
         btn_login = findViewById(R.id.btn_login);

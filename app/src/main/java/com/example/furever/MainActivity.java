@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
+    private static final String TAG = "MainActivity";
     FirebaseAuth auth;
     FirebaseUser user;
     FirebaseFirestore db;
@@ -39,29 +40,46 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        auth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-        user = auth.getCurrentUser();
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
-
-        if (user == null) {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-            finish();
-            return;
-        }
-
-        // Setup bottom navigation
-        bottomNavigationView.setOnItemSelectedListener(this);
         
-        // Check if we should show questions
-        if (getIntent().getBooleanExtra("SHOW_QUESTIONS", false)) {
-            showQuestionsScreen();
-        } else {
-            // Default to Posts fragment
-            loadFragment(new PostsFragment());
-            bottomNavigationView.setSelectedItemId(R.id.navigation_posts);
+        try {
+            Log.d(TAG, "Starting MainActivity onCreate");
+            setContentView(R.layout.activity_main);
+
+            auth = FirebaseAuth.getInstance();
+            Log.d(TAG, "Firebase Auth initialized");
+            
+            db = FirebaseFirestore.getInstance();
+            Log.d(TAG, "Firestore initialized");
+            
+            user = auth.getCurrentUser();
+            Log.d(TAG, "Current user: " + (user != null ? user.getEmail() : "null"));
+            
+            bottomNavigationView = findViewById(R.id.bottom_navigation);
+            Log.d(TAG, "BottomNavigationView initialized");
+
+            if (user == null) {
+                Log.d(TAG, "No user found, redirecting to LoginActivity");
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                finish();
+                return;
+            }
+
+            // Setup bottom navigation
+            bottomNavigationView.setOnItemSelectedListener(this);
+            
+            // Check if we should show questions
+            if (getIntent().getBooleanExtra("SHOW_QUESTIONS", false)) {
+                Log.d(TAG, "Showing questions screen");
+                showQuestionsScreen();
+            } else {
+                // Default to Posts fragment
+                Log.d(TAG, "Loading Posts fragment");
+                loadFragment(new PostsFragment());
+                bottomNavigationView.setSelectedItemId(R.id.navigation_posts);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error in onCreate", e);
+            Toast.makeText(this, "Error initializing app: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
     
