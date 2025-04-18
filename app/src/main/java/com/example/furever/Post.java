@@ -11,19 +11,30 @@ public class Post {
     private String sex;
     private String age;
     private String description;
+    private String address;
+    private double latitude;
+    private double longitude;
 
     // Empty constructor required for Firestore
     public Post() {
     }
 
-    public Post(String userId, String userName, String breed, String sex, String age, String description) {
+    public Post(String userId, String userName, String breed, String sex, String age, 
+                String description, String address, double latitude, double longitude) {
         this.userId = userId;
         this.userName = userName;
         this.breed = breed;
         this.sex = sex;
         this.age = age;
         this.description = description;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.timestamp = new Date();
+    }
+
+    public Post(String userId, String userName, String breed, String sex, String age, String description) {
+        this(userId, userName, breed, sex, age, description, "", 0.0, 0.0);
     }
 
     // Getters and Setters
@@ -89,5 +100,29 @@ public class Post {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+    
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 } 

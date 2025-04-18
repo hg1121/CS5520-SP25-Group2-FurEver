@@ -26,5 +26,6 @@
     <string name="match_2">Match 2</string>
     <string name="match_3">Match 3</string>
     <string name="selected_dog_image">Selected Dog Image</string>
-
+    <!-- Add Google Maps API Key -->
+    <string name="google_maps_api_key">API Key</string>
 </resources>

@@ -149,7 +149,10 @@ public class PostsFragment extends Fragment implements PostAdapter.OnPostClickLi
                 "Female",
                 "Young (1-3 years)",
                 "Looking for a loving home for Luna, a friendly and energetic Golden Retriever. " +
-                "She's great with kids and other dogs. Fully vaccinated and trained."
+                "She's great with kids and other dogs. Fully vaccinated and trained.",
+                "123 Main St, Boston, MA 02115",
+                42.3601,
+                -71.0589
             ),
             new Post(
                 "sample_user_2",
@@ -158,7 +161,10 @@ public class PostsFragment extends Fragment implements PostAdapter.OnPostClickLi
                 "Male",
                 "Puppy (0-1 year)",
                 "Max is a 6-month-old German Shepherd puppy looking for an active family. " +
-                "He's already showing great potential in basic training and loves to learn."
+                "He's already showing great potential in basic training and loves to learn.",
+                "456 Park Ave, New York, NY 10022",
+                40.7128,
+                -74.0060
             ),
             new Post(
                 "sample_user_3",
@@ -167,7 +173,10 @@ public class PostsFragment extends Fragment implements PostAdapter.OnPostClickLi
                 "Male",
                 "Adult (3-7 years)",
                 "Meet Charlie, a calm and affectionate Frenchie who loves cuddles. " +
-                "Perfect for apartment living and great with families."
+                "Perfect for apartment living and great with families.",
+                "789 Ocean Blvd, Miami, FL 33139",
+                25.7617,
+                -80.1918
             ),
             new Post(
                 "sample_user_4",
@@ -176,7 +185,10 @@ public class PostsFragment extends Fragment implements PostAdapter.OnPostClickLi
                 "Female",
                 "Senior (7+ years)",
                 "Sweet senior Lab named Bella seeking a quiet home to spend her golden years. " +
-                "Well-behaved and gentle with everyone she meets."
+                "Well-behaved and gentle with everyone she meets.",
+                "321 Highland Dr, Seattle, WA 98101",
+                47.6062,
+                -122.3321
             ),
             new Post(
                 "sample_user_5",
@@ -185,7 +197,10 @@ public class PostsFragment extends Fragment implements PostAdapter.OnPostClickLi
                 "Male",
                 "Young (1-3 years)",
                 "Cooper is a highly intelligent Border Collie looking for an active home. " +
-                "Great for agility training and outdoor activities."
+                "Great for agility training and outdoor activities.",
+                "555 River Rd, Chicago, IL 60601",
+                41.8781,
+                -87.6298
             )
         );
 
@@ -212,10 +227,16 @@ public class PostsFragment extends Fragment implements PostAdapter.OnPostClickLi
 
     @Override
     public void onUserImageClick(String userId, String userName) {
-        if (userId == null || userId.startsWith("sample_user_")) {
+        if (userId == null || userId.isEmpty() || userId.startsWith("sample_user_")) {
             // Show sample user email
-            showUserEmailDialog(userName, userName.toLowerCase().replace(" ", ".") + "@example.com");
+            String email = userName.toLowerCase().replace(" ", ".") + "@example.com";
+            showUserEmailDialog(userName, email);
             return;
+        }
+
+        // Show loading toast
+        if (getContext() != null) {
+            Toast.makeText(getContext(), "Loading contact information...", Toast.LENGTH_SHORT).show();
         }
 
         // For real users, fetch their email from Firestore
@@ -227,13 +248,21 @@ public class PostsFragment extends Fragment implements PostAdapter.OnPostClickLi
                     User user = documentSnapshot.toObject(User.class);
                     if (user != null && user.getEmail() != null) {
                         showUserEmailDialog(userName, user.getEmail());
+                    } else {
+                        // Handle case where user object is invalid
+                        showUserEmailDialog(userName, userId + "@example.com");
                     }
+                } else {
+                    // Handle case where document doesn't exist
+                    Log.d(TAG, "User document not found for ID: " + userId);
+                    showUserEmailDialog(userName, userId + "@example.com");
                 }
             })
             .addOnFailureListener(e -> {
-                Log.e(TAG, "Error fetching user data", e);
+                Log.e(TAG, "Error fetching user data: " + e.getMessage(), e);
+                // Fallback to showing a generic email
                 if (getContext() != null) {
-                    Toast.makeText(getContext(), "Error fetching user information", Toast.LENGTH_SHORT).show();
+                    showUserEmailDialog(userName, userId + "@example.com");
                 }
             });
     }
