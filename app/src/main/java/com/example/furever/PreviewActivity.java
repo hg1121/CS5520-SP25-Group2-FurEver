@@ -218,6 +218,33 @@ public class PreviewActivity extends AppCompatActivity {
     }
     //
     private String buildPrompt(DogPreference pref) {
+        String allowedBreeds = "[\"Affenpinscher\", \"African\", \"Airedale\", \"Akita\", \"Appenzeller\", \"Australian Kelpie\", \"Australian Shepherd\", " +
+                "\"Bakharwal Indian\", \"Basenji\", \"Beagle\", \"Bluetick\", \"Borzoi\", \"Bouvier\", \"Boxer\", \"Brabancon\", \"Briard\", " +
+                "\"Buhund Norwegian\", \"Bulldog Boston\", \"Bulldog English\", \"Bulldog French\", \"Bullterrier Staffordshire\", " +
+                "\"Cattledog Australian\", \"Cavapoo\", \"Chihuahua\", \"Chippiparai Indian\", \"Chow\", \"Clumber\", \"Cockapoo\", " +
+                "\"Collie Border\", \"Coonhound\", \"Corgi Cardigan\", \"Cotondetulear\", \"Dachshund\", \"Dalmatian\", \"Dane Great\", " +
+                "\"Danish Swedish\", \"Deerhound Scottish\", \"Dhole\", \"Dingo\", \"Doberman\", \"Elkhound Norwegian\", \"Entlebucher\", " +
+                "\"Eskimo\", \"Finnish Lapphund\", \"Frise Bichon\", \"Gaddi Indian\", \"Germanshepherd\", \"Greyhound Indian\", " +
+                "\"Greyhound Italian\", \"Groenendael\", \"Havanese\", \"Hound Afghan\", \"Hound Basset\", \"Hound Blood\", " +
+                "\"Hound English\", \"Hound Ibizan\", \"Hound Plott\", \"Hound Walker\", \"Husky\", \"Keeshond\", \"Kelpie\", \"Kombai\", " +
+                "\"Komondor\", \"Kuvasz\", \"Labradoodle\", \"Labrador\", \"Leonberg\", \"Lhasa\", \"Malamute\", \"Malinois\", \"Maltese\", " +
+                "\"Mastiff Bull\", \"Mastiff English\", \"Mastiff Indian\", \"Mastiff Tibetan\", \"Mexicanhairless\", \"Mix\", " +
+                "\"Mountain Bernese\", \"Mountain Swiss\", \"Mudhol Indian\", \"Newfoundland\", \"Otterhound\", \"Ovcharka Caucasian\", " +
+                "\"Papillon\", \"Pariah Indian\", \"Pekinese\", \"Pembroke\", \"Pinscher Miniature\", \"Pitbull\", \"Pointer German\", " +
+                "\"Pointer Germanlonghair\", \"Pomeranian\", \"Poodle Medium\", \"Poodle Miniature\", \"Poodle Standard\", " +
+                "\"Poodle Toy\", \"Pug\", \"Puggle\", \"Pyrenees\", \"Rajapalayam Indian\", \"Redbone\", \"Retriever Chesapeake\", " +
+                "\"Retriever Curly\", \"Retriever Flatcoated\", \"Retriever Golden\", \"Ridgeback Rhodesian\", \"Rottweiler\", " +
+                "\"Saluki\", \"Samoyed\", \"Schipperke\", \"Schnauzer Giant\", \"Schnauzer Miniature\", \"Segugio Italian\", " +
+                "\"Setter English\", \"Setter Gordon\", \"Setter Irish\", \"Sharpei\", \"Sheepdog English\", \"Sheepdog Indian\", " +
+                "\"Sheepdog Shetland\", \"Shiba\", \"Shihtzu\", \"Spaniel Blenheim\", \"Spaniel Brittany\", \"Spaniel Cocker\", " +
+                "\"Spaniel Irish\", \"Spaniel Japanese\", \"Spaniel Sussex\", \"Spaniel Welsh\", \"Spitz Indian\", \"Spitz Japanese\", " +
+                "\"Springer English\", \"Stbernard\", \"Terrier American\", \"Terrier Australian\", \"Terrier Bedlington\", " +
+                "\"Terrier Border\", \"Terrier Cairn\", \"Terrier Dandie\", \"Terrier Fox\", \"Terrier Irish\", \"Terrier Kerryblue\", " +
+                "\"Terrier Lakeland\", \"Terrier Norfolk\", \"Terrier Norwich\", \"Terrier Patterdale\", \"Terrier Russell\", " +
+                "\"Terrier Scottish\", \"Terrier Sealyham\", \"Terrier Silky\", \"Terrier Tibetan\", \"Terrier Toy\", " +
+                "\"Terrier Welsh\", \"Terrier Westhighland\", \"Terrier Wheaten\", \"Terrier Yorkshire\", \"Tervuren\", \"Vizsla\", " +
+                "\"Waterdog Spanish\", \"Weimaraner\", \"Whippet\", \"Wolfhound Irish\"]";
+
         return "I am looking for a dog recommendation.\n\n" +
                 "Here are my preferences:\n" +
                 "- Size: " + pref.size + "\n" +
@@ -226,7 +253,7 @@ public class PreviewActivity extends AppCompatActivity {
                 "- Home Type: " + pref.homeType + "\n" +
                 "- Have Children: " + pref.haveChildren + "\n" +
                 "- Monthly Budget: " + pref.budget + "\n\n" +
-                "Please recommend 3 dog breeds that suit me in the following structured JSON format:\n" +
+                "Please recommend 3 dog breeds that suit me, in the following structured JSON format:\n" +
                 "[\n" +
                 "  {\n" +
                 "    \"breed\": \"\",\n" +
@@ -235,7 +262,8 @@ public class PreviewActivity extends AppCompatActivity {
                 "    \"care_tips\": \"\"\n" +
                 "  },\n" +
                 "  ... (2 more entries)\n" +
-                "]\n" +
+                "]\n\n" +
+                "**Important:** Only select dog breeds from this allowed list:\n" + allowedBreeds + "\n\n" +
                 "Only return valid JSON. Do not include any commentary.";
     }
 
