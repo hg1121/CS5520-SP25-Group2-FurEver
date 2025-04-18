@@ -1,11 +1,9 @@
 package com.example.furever;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -13,11 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.button.MaterialButton;
+
 public class Q3Fragment extends Fragment {
-
-    private RadioGroup rgCoat;
-
-    public Q3Fragment() {}
+    private RadioGroup rgQuestion;
 
     public static Q3Fragment newInstance() {
         return new Q3Fragment();
@@ -28,36 +25,39 @@ public class Q3Fragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_q3, container, false);
-        rgCoat = view.findViewById(R.id.rg_coat);
-        view.findViewById(R.id.btn_prev3).setOnClickListener(v ->
+
+        rgQuestion = view.findViewById(R.id.rg_question);
+        MaterialButton btnPrev = view.findViewById(R.id.btn_prev);
+        MaterialButton btnNext = view.findViewById(R.id.btn_next);
+
+        btnPrev.setOnClickListener(v ->
                 ((MainActivity) requireActivity()).goToPrevQuestion()
         );
-        view.findViewById(R.id.btn_next3).setOnClickListener(v ->
+        btnNext.setOnClickListener(v ->
                 ((MainActivity) requireActivity()).goToNextQuestion()
         );
+
         return view;
     }
 
-    @Override
-    public void onPause() {
+    @Override public void onPause() {
         super.onPause();
-        if (rgCoat == null) return;
-        int sel = rgCoat.getCheckedRadioButtonId();
+        if (rgQuestion == null) return;
+        int sel = rgQuestion.getCheckedRadioButtonId();
         String val = null;
         if (sel != -1) {
-            RadioButton rb = rgCoat.findViewById(sel);
+            RadioButton rb = rgQuestion.findViewById(sel);
             val = rb.getTag() != null ? rb.getTag().toString() : null;
         }
         ((MainActivity) requireActivity()).getDogPreference().coatLength = val;
     }
 
-    @Override
-    public void onResume() {
+    @Override public void onResume() {
         super.onResume();
         String prev = ((MainActivity) requireActivity()).getDogPreference().coatLength;
-        if (prev != null && rgCoat != null) {
-            for (int i = 0; i < rgCoat.getChildCount(); i++) {
-                View c = rgCoat.getChildAt(i);
+        if (prev != null && rgQuestion != null) {
+            for (int i = 0; i < rgQuestion.getChildCount(); i++) {
+                View c = rgQuestion.getChildAt(i);
                 if (c instanceof RadioButton && prev.equals(c.getTag())) {
                     ((RadioButton)c).setChecked(true);
                     break;
