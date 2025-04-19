@@ -125,8 +125,8 @@ public class PostsFragment extends Fragment implements PostAdapter.OnPostClickLi
                         allPosts.add(post);
                     }
 
-                    // Append sample posts
-                    allPosts.addAll(getSamplePosts());
+//                    // Append sample posts
+//                    allPosts.addAll(getSamplePosts());
 
                     // Display all posts
                     adapter.setPosts(new ArrayList<>(allPosts));
@@ -192,37 +192,37 @@ public class PostsFragment extends Fragment implements PostAdapter.OnPostClickLi
     }
 
 
-    private List<Post> getSamplePosts() {
-        List<Post> samples = Arrays.asList(
-                new Post("sample_user_1", "Sarah Johnson", "Golden Retriever",
-                        "Female", "Young (1-3 years)",
-                        "Looking for a loving home for Luna...",
-                        "123 Main St, Boston, MA 02115", 42.3601, -71.0589),
-                new Post("sample_user_2", "Mike Wilson", "German Shepherd",
-                        "Male", "Puppy (0-1 year)",
-                        "Max is a 6‑month‑old German Shepherd...",
-                        "456 Park Ave, New York, NY 10022", 40.7128, -74.0060),
-                new Post("sample_user_3", "Emily Chen", "French Bulldog",
-                        "Male", "Adult (3-7 years)",
-                        "Meet Charlie, a calm and affectionate Frenchie...",
-                        "789 Ocean Blvd, Miami, FL 33139", 25.7617, -80.1918),
-                new Post("sample_user_4", "David Brown", "Labrador Retriever",
-                        "Female", "Senior (7+ years)",
-                        "Sweet senior Lab named Bella...",
-                        "321 Highland Dr, Seattle, WA 98101", 47.6062, -122.3321),
-                new Post("sample_user_5", "Lisa Martinez", "Border Collie",
-                        "Male", "Young (1-3 years)",
-                        "Cooper is a highly intelligent Border Collie...",
-                        "555 River Rd, Chicago, IL 60601", 41.8781, -87.6298)
-        );
-
-        for (int i = 0; i < samples.size(); i++) {
-            Post p = samples.get(i);
-            p.setId("sample_post_" + (i + 1));
-            p.setTimestamp(new Date(System.currentTimeMillis() - i * 86400000L));
-        }
-        return samples;
-    }
+//    private List<Post> getSamplePosts() {
+//        List<Post> samples = Arrays.asList(
+//                new Post("sample_user_1", "Sarah Johnson", "Golden Retriever",
+//                        "Female", "Young (1-3 years)",
+//                        "Looking for a loving home for Luna...",
+//                        "123 Main St, Boston, MA 02115", 42.3601, -71.0589),
+//                new Post("sample_user_2", "Mike Wilson", "German Shepherd",
+//                        "Male", "Puppy (0-1 year)",
+//                        "Max is a 6‑month‑old German Shepherd...",
+//                        "456 Park Ave, New York, NY 10022", 40.7128, -74.0060),
+//                new Post("sample_user_3", "Emily Chen", "French Bulldog",
+//                        "Male", "Adult (3-7 years)",
+//                        "Meet Charlie, a calm and affectionate Frenchie...",
+//                        "789 Ocean Blvd, Miami, FL 33139", 25.7617, -80.1918),
+//                new Post("sample_user_4", "David Brown", "Labrador Retriever",
+//                        "Female", "Senior (7+ years)",
+//                        "Sweet senior Lab named Bella...",
+//                        "321 Highland Dr, Seattle, WA 98101", 47.6062, -122.3321),
+//                new Post("sample_user_5", "Lisa Martinez", "Border Collie",
+//                        "Male", "Young (1-3 years)",
+//                        "Cooper is a highly intelligent Border Collie...",
+//                        "555 River Rd, Chicago, IL 60601", 41.8781, -87.6298)
+//        );
+//
+//        for (int i = 0; i < samples.size(); i++) {
+//            Post p = samples.get(i);
+//            p.setId("sample_post_" + (i + 1));
+//            p.setTimestamp(new Date(System.currentTimeMillis() - i * 86400000L));
+//        }
+//        return samples;
+//    }
 
     @Override
     public void onPostClick(Post post) {
