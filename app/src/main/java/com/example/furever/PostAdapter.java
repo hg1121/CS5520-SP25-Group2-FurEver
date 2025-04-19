@@ -160,7 +160,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
     /**
      * Extracts city and state from a full address
-     * Example: "123 Main St, Boston, MA 02115" -> "Boston, MA"
+     * Format: "Street, City, State, Country"
+     * Example: "123 Main St, Boston, MA, USA" -> "Boston, MA"
      */
     private String extractCityState(String fullAddress) {
         if (fullAddress == null || fullAddress.isEmpty()) {
@@ -168,26 +169,38 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         }
         
         try {
-            // Most addresses follow a pattern with commas
+            // Split address by commas
             String[] parts = fullAddress.split(",");
-            if (parts.length >= 3) {
-                // Format: "Street, City, State ZIP"
-                String city = parts[parts.length - 2].trim();
-                String stateZip = parts[parts.length - 1].trim();
-                String state = stateZip.split(" ")[0].trim();
+            
+            // "Street, City, State, Country" format
+            if (parts.length >= 4) {
+                // City is the second part
+                String city = parts[1].trim();
+                // State is the third part
+                String state = parts[2].trim();
+                
                 return city + ", " + state;
-            } else if (parts.length == 2) {
-                // Format: "City, State ZIP"
+                
+            } else if (parts.length == 3) {
+                // Possible format: "City, State, Country"
                 String city = parts[0].trim();
-                String stateZip = parts[1].trim();
-                String state = stateZip.split(" ")[0].trim();
+                String state = parts[1].trim();
+                
                 return city + ", " + state;
+                
+            } else if (parts.length == 2) {
+                // Possible format: "City, State"
+                String city = parts[0].trim();
+                String state = parts[1].trim();
+                
+                return city + ", " + state;
+                
             } else {
-                // If we can't parse it correctly, just return the first 30 chars
-                return fullAddress.length() > 30 ? fullAddress.substring(0, 30) + "..." : fullAddress;
+                // Single part address, just return it
+                return fullAddress.trim();
             }
         } catch (Exception e) {
-            // In case of any parsing errors, return the original address
+            // In case of any parsing errors, return a safe version of the original address
             return fullAddress.length() > 30 ? fullAddress.substring(0, 30) + "..." : fullAddress;
         }
     }
