@@ -3,23 +3,25 @@ package com.example.furever;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -28,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class PostsFragment extends Fragment implements PostAdapter.OnPostClickListener {
     private static final String TAG = "PostsFragment";
@@ -36,182 +40,188 @@ public class PostsFragment extends Fragment implements PostAdapter.OnPostClickLi
     private PostAdapter adapter;
     private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefresh;
+    private FloatingActionButton fabAddPost;
+
+    private AutoCompleteTextView regionInput;
+    private ArrayAdapter<String> regionAdapter;
+    private List<Post> allPosts = new ArrayList<>();
+
     private FirebaseFirestore db;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container,
+                             Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_posts, container, false);
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view,
+                              @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         // Initialize Firestore
         db = FirebaseFirestore.getInstance();
 
-        // Initialize views
-        recyclerView = view.findViewById(R.id.recyclerView);
-        progressBar = view.findViewById(R.id.progressBar);
-        swipeRefresh = view.findViewById(R.id.swipeRefresh);
-        FloatingActionButton fabAddPost = view.findViewById(R.id.fabAddPost);
+        // Reference UI elements
+        recyclerView  = view.findViewById(R.id.recyclerView);
+        progressBar   = view.findViewById(R.id.progressBar);
+        swipeRefresh  = view.findViewById(R.id.swipeRefresh);
+        fabAddPost    = view.findViewById(R.id.fabAddPost);
+        regionInput   = view.findViewById(R.id.regionInput);
 
-        // Setup RecyclerView
+        // Set up RecyclerView and its adapter
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new PostAdapter(this);
         recyclerView.setAdapter(adapter);
 
-        // Setup SwipeRefreshLayout
-        swipeRefresh.setOnRefreshListener(this::loadPosts);
+        // Set up dropdown suggestions adapter (initially empty)
+        regionAdapter = new ArrayAdapter<>(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                new ArrayList<>()
+        );
+        regionInput.setAdapter(regionAdapter);
 
-        // Setup FAB
-        fabAddPost.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(), CreatePostActivity.class);
-            startActivity(intent);
+        // Listen for text changes to filter posts
+        regionInput.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable s) {
+                filterByRegion(s.toString());
+            }
         });
 
-        // Load initial data
+        // Pull-to-refresh
+        swipeRefresh.setOnRefreshListener(this::loadPosts);
+
+        // Floating action button to create a new post
+        fabAddPost.setOnClickListener(v ->
+                startActivity(new Intent(getContext(), CreatePostActivity.class))
+        );
+
+        // Load posts initially
         loadPosts();
     }
 
-    private void loadPosts() {
-        // Check if fragment is attached to activity
-        Context context = getContext();
-        if (context == null) {
-            return;
-        }
 
-        if (progressBar != null) {
-            progressBar.setVisibility(View.VISIBLE);
-        }
+    private void loadPosts() {
+        Context context = getContext();
+        if (context == null) return;
+
+        progressBar.setVisibility(View.VISIBLE);
 
         db.collection("posts")
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    if (!isAdded()) {
-                        return;
+                .addOnSuccessListener(snapshot -> {
+                    if (!isAdded()) return;
+
+                    allPosts.clear();
+                    for (QueryDocumentSnapshot doc : snapshot) {
+                        Post post = doc.toObject(Post.class);
+                        post.setId(doc.getId());
+                        allPosts.add(post);
                     }
 
-                    List<Post> posts = new ArrayList<>();
-                    
-                    // Add user posts
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        Post post = document.toObject(Post.class);
-                        post.setId(document.getId());
-                        posts.add(post);
-                    }
+                    // Append sample posts
+                    allPosts.addAll(getSamplePosts());
 
-                    // Add sample posts
-                    List<Post> samplePosts = getSamplePosts();
-                    posts.addAll(samplePosts);
+                    // Display all posts
+                    adapter.setPosts(new ArrayList<>(allPosts));
+                    swipeRefresh.setRefreshing(false);
+                    progressBar.setVisibility(View.GONE);
 
-                    if (adapter != null) {
-                        adapter.setPosts(posts);
-                    }
-
-                    if (progressBar != null) {
-                        progressBar.setVisibility(View.GONE);
-                    }
-
-                    if (swipeRefresh != null) {
-                        swipeRefresh.setRefreshing(false);
-                    }
+                    // Update region dropdown suggestions
+                    updateRegionSuggestions();
                 })
                 .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error loading posts: ", e);
-                    if (!isAdded()) {
-                        return;
-                    }
-
-                    Context ctx = getContext();
-                    if (ctx != null) {
-                        Toast.makeText(ctx, "Error loading posts: " + e.getMessage(),
-                                Toast.LENGTH_SHORT).show();
-                    }
-
-                    if (progressBar != null) {
-                        progressBar.setVisibility(View.GONE);
-                    }
-
-                    if (swipeRefresh != null) {
-                        swipeRefresh.setRefreshing(false);
-                    }
+                    Log.e(TAG, "Error loading posts", e);
+                    Toast.makeText(context,
+                            "Error loading posts: " + e.getMessage(),
+                            Toast.LENGTH_SHORT).show();
+                    swipeRefresh.setRefreshing(false);
+                    progressBar.setVisibility(View.GONE);
                 });
     }
 
-    private List<Post> getSamplePosts() {
-        List<Post> samplePosts = Arrays.asList(
-            new Post(
-                "sample_user_1",
-                "Sarah Johnson",
-                "Golden Retriever",
-                "Female",
-                "Young (1-3 years)",
-                "Looking for a loving home for Luna, a friendly and energetic Golden Retriever. " +
-                "She's great with kids and other dogs. Fully vaccinated and trained.",
-                "123 Main St, Boston, MA 02115",
-                42.3601,
-                -71.0589
-            ),
-            new Post(
-                "sample_user_2",
-                "Mike Wilson",
-                "German Shepherd",
-                "Male",
-                "Puppy (0-1 year)",
-                "Max is a 6-month-old German Shepherd puppy looking for an active family. " +
-                "He's already showing great potential in basic training and loves to learn.",
-                "456 Park Ave, New York, NY 10022",
-                40.7128,
-                -74.0060
-            ),
-            new Post(
-                "sample_user_3",
-                "Emily Chen",
-                "French Bulldog",
-                "Male",
-                "Adult (3-7 years)",
-                "Meet Charlie, a calm and affectionate Frenchie who loves cuddles. " +
-                "Perfect for apartment living and great with families.",
-                "789 Ocean Blvd, Miami, FL 33139",
-                25.7617,
-                -80.1918
-            ),
-            new Post(
-                "sample_user_4",
-                "David Brown",
-                "Labrador Retriever",
-                "Female",
-                "Senior (7+ years)",
-                "Sweet senior Lab named Bella seeking a quiet home to spend her golden years. " +
-                "Well-behaved and gentle with everyone she meets.",
-                "321 Highland Dr, Seattle, WA 98101",
-                47.6062,
-                -122.3321
-            ),
-            new Post(
-                "sample_user_5",
-                "Lisa Martinez",
-                "Border Collie",
-                "Male",
-                "Young (1-3 years)",
-                "Cooper is a highly intelligent Border Collie looking for an active home. " +
-                "Great for agility training and outdoor activities.",
-                "555 River Rd, Chicago, IL 60601",
-                41.8781,
-                -87.6298
-            )
-        );
-
-        // Set IDs and timestamps for sample posts
-        for (int i = 0; i < samplePosts.size(); i++) {
-            Post post = samplePosts.get(i);
-            post.setId("sample_post_" + (i + 1));
-            post.setTimestamp(new Date(System.currentTimeMillis() - (i * 86400000L))); // Spread over last few days
+    private void updateRegionSuggestions() {
+        Set<String> regionsSet = new TreeSet<>();
+        for (Post p : allPosts) {
+            String fullAddress = p.getAddress();
+            if (fullAddress != null && !fullAddress.isEmpty()) {
+                regionsSet.add(extractRegion(fullAddress));
+            }
         }
 
-        return samplePosts;
+        List<String> regions = new ArrayList<>(regionsSet);
+        regions.add(0, "All Regions");
+
+        regionAdapter.clear();
+        regionAdapter.addAll(regions);
+        regionAdapter.notifyDataSetChanged();
+    }
+
+    private String extractRegion(String fullAddress) {
+        String[] parts = fullAddress.split(",");
+        if (parts.length < 2) {
+            return fullAddress.trim();
+        }
+        String city = parts[1].trim();
+        String statePart = parts.length >= 3 ? parts[2].trim() : "";
+        String state = statePart.split("\\s+")[0];
+        return city + ", " + state;
+    }
+
+    private void filterByRegion(String region) {
+        if (region == null
+                || region.isEmpty()
+                || "All Regions".equalsIgnoreCase(region)) {
+            adapter.setPosts(new ArrayList<>(allPosts));
+        } else {
+            List<Post> filtered = new ArrayList<>();
+            for (Post p : allPosts) {
+                String regionOfPost = extractRegion(p.getAddress() != null ? p.getAddress() : "");
+                if (regionOfPost.toLowerCase().contains(region.toLowerCase())) {
+                    filtered.add(p);
+                }
+            }
+            adapter.setPosts(filtered);
+        }
+    }
+
+
+    private List<Post> getSamplePosts() {
+        List<Post> samples = Arrays.asList(
+                new Post("sample_user_1", "Sarah Johnson", "Golden Retriever",
+                        "Female", "Young (1-3 years)",
+                        "Looking for a loving home for Luna...",
+                        "123 Main St, Boston, MA 02115", 42.3601, -71.0589),
+                new Post("sample_user_2", "Mike Wilson", "German Shepherd",
+                        "Male", "Puppy (0-1 year)",
+                        "Max is a 6‑month‑old German Shepherd...",
+                        "456 Park Ave, New York, NY 10022", 40.7128, -74.0060),
+                new Post("sample_user_3", "Emily Chen", "French Bulldog",
+                        "Male", "Adult (3-7 years)",
+                        "Meet Charlie, a calm and affectionate Frenchie...",
+                        "789 Ocean Blvd, Miami, FL 33139", 25.7617, -80.1918),
+                new Post("sample_user_4", "David Brown", "Labrador Retriever",
+                        "Female", "Senior (7+ years)",
+                        "Sweet senior Lab named Bella...",
+                        "321 Highland Dr, Seattle, WA 98101", 47.6062, -122.3321),
+                new Post("sample_user_5", "Lisa Martinez", "Border Collie",
+                        "Male", "Young (1-3 years)",
+                        "Cooper is a highly intelligent Border Collie...",
+                        "555 River Rd, Chicago, IL 60601", 41.8781, -87.6298)
+        );
+
+        for (int i = 0; i < samples.size(); i++) {
+            Post p = samples.get(i);
+            p.setId("sample_post_" + (i + 1));
+            p.setTimestamp(new Date(System.currentTimeMillis() - i * 86400000L));
+        }
+        return samples;
     }
 
     @Override
@@ -228,53 +238,38 @@ public class PostsFragment extends Fragment implements PostAdapter.OnPostClickLi
     @Override
     public void onUserImageClick(String userId, String userName) {
         if (userId == null || userId.isEmpty() || userId.startsWith("sample_user_")) {
-            // Show sample user email
-            String email = userName.toLowerCase().replace(" ", ".") + "@example.com";
-            showUserEmailDialog(userName, email);
+            String fakeEmail = userName.toLowerCase().replace(" ", ".") + "@example.com";
+            showUserEmailDialog(userName, fakeEmail);
             return;
         }
 
-        // Show loading toast
-        if (getContext() != null) {
-            Toast.makeText(getContext(), "Loading contact information...", Toast.LENGTH_SHORT).show();
-        }
+        Toast.makeText(getContext(),
+                "Loading contact information...", Toast.LENGTH_SHORT).show();
 
-        // For real users, fetch their email from Firestore
         db.collection("users")
-            .document(userId)
-            .get()
-            .addOnSuccessListener(documentSnapshot -> {
-                if (documentSnapshot.exists()) {
-                    User user = documentSnapshot.toObject(User.class);
-                    if (user != null && user.getEmail() != null) {
-                        showUserEmailDialog(userName, user.getEmail());
-                    } else {
-                        // Handle case where user object is invalid
-                        showUserEmailDialog(userName, userId + "@example.com");
-                    }
-                } else {
-                    // Handle case where document doesn't exist
-                    Log.d(TAG, "User document not found for ID: " + userId);
+                .document(userId)
+                .get()
+                .addOnSuccessListener(doc -> {
+                    User user = doc.toObject(User.class);
+                    String email = (user != null && user.getEmail() != null)
+                            ? user.getEmail()
+                            : userId + "@example.com";
+                    showUserEmailDialog(userName, email);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error fetching user data", e);
                     showUserEmailDialog(userName, userId + "@example.com");
-                }
-            })
-            .addOnFailureListener(e -> {
-                Log.e(TAG, "Error fetching user data: " + e.getMessage(), e);
-                // Fallback to showing a generic email
-                if (getContext() != null) {
-                    showUserEmailDialog(userName, userId + "@example.com");
-                }
-            });
+                });
     }
 
     private void showUserEmailDialog(String userName, String email) {
         Context context = getContext();
         if (context != null) {
-            new AlertDialog.Builder(context)
-                .setTitle(userName + "'s Contact")
-                .setMessage("Email: " + email)
-                .setPositiveButton("OK", null)
-                .show();
+            new androidx.appcompat.app.AlertDialog.Builder(context)
+                    .setTitle(userName + "'s Contact")
+                    .setMessage("Email: " + email)
+                    .setPositiveButton("OK", null)
+                    .show();
         }
     }
-} 
+}
