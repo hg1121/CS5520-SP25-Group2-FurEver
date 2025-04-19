@@ -21,6 +21,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -93,33 +95,51 @@ public class RegisterActivity extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     // Get the user from the auth result
                                     FirebaseUser user = mAuth.getCurrentUser();
-                                    
+
                                     // Create a new user object
                                     User newUser = new User(user.getUid(), user.getEmail());
-                                    
+
                                     // Save the user to Firestore
                                     db.collection("users").document(user.getUid())
-                                        .set(newUser)
-                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()) {
-                                                    Toast.makeText(RegisterActivity.this, "Account Created.",
-                                                            Toast.LENGTH_SHORT).show();
-                                                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                                                    startActivity(intent);
-                                                    finish();
-                                                } else {
-                                                    Toast.makeText(RegisterActivity.this, "Failed to save user data.",
-                                                            Toast.LENGTH_SHORT).show();
+                                            .set(newUser)
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(RegisterActivity.this, "Account Created.",
+                                                                Toast.LENGTH_SHORT).show();
+                                                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                                                        startActivity(intent);
+                                                        finish();
+                                                    } else {
+                                                        Toast.makeText(RegisterActivity.this, "Failed to save user data.",
+                                                                Toast.LENGTH_SHORT).show();
+                                                    }
                                                 }
+                                            });
+//                                } else {
+//                                    Toast.makeText(RegisterActivity.this, "Authentication failed.",
+//                                            Toast.LENGTH_SHORT).show();
+//                                }
+
+                                }else {
+                                        String errorMessage = "Authentication failed.";
+                                        Exception exception = task.getException();
+                                        if (exception != null) {
+//                                            if (exception instanceof FirebaseAuthWeakPasswordException) {
+//                                                errorMessage = "Password is too weak. Please use at least 6 characters.";
+//                                            } else
+                                           if (exception instanceof FirebaseAuthInvalidCredentialsException) {
+                                                errorMessage = "Invalid email format.";
+                                            } else if (exception instanceof FirebaseAuthUserCollisionException) {
+                                                errorMessage = "This email is already registered.";
+                                            } else {
+                                                errorMessage = exception.getMessage(); // fallback to default
                                             }
-                                        });
-                                } else {
-                                    Toast.makeText(RegisterActivity.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
+                                        }
+                                        Toast.makeText(RegisterActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                                    }
                                 }
-                            }
                         });
             }
         });
