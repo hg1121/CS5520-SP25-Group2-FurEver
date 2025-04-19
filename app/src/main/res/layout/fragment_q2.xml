@@ -54,21 +54,30 @@
                     android:layout_height="wrap_content"
                     android:buttonTint="@color/purple_500"
                     android:text="Less than 1 hour"
-                    android:tag="Less than 1 hour" />
+                    android:tag="Less than 1 hour"
+                    android:minHeight="48dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"/>
 
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:buttonTint="@color/purple_500"
                     android:text="1–2 hours"
-                    android:tag="1–2 hours" />
+                    android:tag="1–2 hours"
+                    android:minHeight="48dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"/>
 
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:buttonTint="@color/purple_500"
                     android:text="More than 2 hours"
-                    android:tag="More than 2 hours" />
+                    android:tag="More than 2 hours"
+                    android:minHeight="48dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"/>
 
             </RadioGroup>
         </LinearLayout>
