@@ -39,7 +39,8 @@ import java.util.Map;
 public class CreatePostActivity extends AppCompatActivity {
     private static final String TAG = "CreatePostActivity";
 
-    private AutoCompleteTextView spinnerBreed, spinnerSex, spinnerAge;
+    private TextInputEditText editBreed;
+    private AutoCompleteTextView spinnerSex, spinnerAge;
     private AutoCompleteTextView editAddress;
     private TextInputEditText editDescription;
     private Button btnCreatePost;
@@ -53,7 +54,6 @@ public class CreatePostActivity extends AppCompatActivity {
     // Map to store place predictions and their details
     private final Map<String, AutocompletePrediction> predictionMap = new HashMap<>();
 
-    private String selectedBreed = "";
     private String selectedSex = "";
     private String selectedAge = "";
     private String selectedAddress = "";
@@ -61,15 +61,6 @@ public class CreatePostActivity extends AppCompatActivity {
     private double selectedLongitude = 0.0;
 
     // Predefined lists for dropdowns
-    private final List<String> breeds = Arrays.asList(
-        "Labrador Retriever", "German Shepherd", "Golden Retriever", 
-        "French Bulldog", "Bulldog", "Poodle", "Beagle", 
-        "Rottweiler", "Dachshund", "Yorkshire Terrier",
-        "Boxer", "Pug", "Siberian Husky", "Shih Tzu",
-        "Great Dane", "Doberman Pinscher", "Miniature Schnauzer",
-        "Cavalier King Charles Spaniel", "Border Collie", "Mixed Breed"
-    );
-
     private final List<String> sexOptions = Arrays.asList("Male", "Female");
 
     private final List<String> ageRanges = Arrays.asList(
@@ -119,7 +110,7 @@ public class CreatePostActivity extends AppCompatActivity {
         }
 
         // Initialize views
-        spinnerBreed = findViewById(R.id.spinnerBreed);
+        editBreed = findViewById(R.id.spinnerBreed);
         spinnerSex = findViewById(R.id.spinnerSex);
         spinnerAge = findViewById(R.id.spinnerAge);
         editDescription = findViewById(R.id.editDescription);
@@ -198,16 +189,22 @@ public class CreatePostActivity extends AppCompatActivity {
             // Set item click listener for selection
             editAddress.setOnItemClickListener((parent, view, position, id) -> {
                 try {
-                    String selected = (String) parent.getItemAtPosition(position);
-                    selectedAddress = selected;
-                    Log.d(TAG, "Selected address: " + selectedAddress);
+                    String item = (String) parent.getItemAtPosition(position);
+                    editAddress.setText(item);
+                    selectedAddress = item;
+                    
+                    if (predictionMap.containsKey(item)) {
+                        AutocompletePrediction prediction = predictionMap.get(item);
+                        if (prediction != null) {
+                            getPlaceDetails(prediction.getPlaceId());
+                        }
+                    }
                 } catch (Exception e) {
-                    Log.e(TAG, "Error setting selected address: " + e.getMessage());
+                    Log.e(TAG, "Error in item selection: " + e.getMessage());
                 }
             });
         } catch (Exception e) {
             Log.e(TAG, "Error setting up Places autocomplete: " + e.getMessage());
-            Toast.makeText(this, "Address autocomplete may not work properly", Toast.LENGTH_SHORT).show();
         }
     }
     
@@ -282,15 +279,6 @@ public class CreatePostActivity extends AppCompatActivity {
 
     private void setupDropdowns() {
         try {
-            // Setup breed dropdown
-            ArrayAdapter<String> breedAdapter = new ArrayAdapter<>(
-                this, R.layout.dropdown_item, breeds);
-            spinnerBreed.setAdapter(breedAdapter);
-            spinnerBreed.setOnItemClickListener((parent, view, position, id) -> {
-                selectedBreed = breeds.get(position);
-                Log.d(TAG, "Selected breed: " + selectedBreed);
-            });
-
             // Setup sex dropdown
             ArrayAdapter<String> sexAdapter = new ArrayAdapter<>(
                 this, R.layout.dropdown_item, sexOptions);
@@ -318,8 +306,10 @@ public class CreatePostActivity extends AppCompatActivity {
     private void createPost() {
         Log.d(TAG, "Attempting to create post...");
         
-        // Use the selected values instead of getText()
-        String breed = selectedBreed;
+        // Get breed directly from the edit text
+        String breed = editBreed.getText().toString().trim();
+        
+        // Use the selected values for sex and age
         String sex = selectedSex;
         String age = selectedAge;
         String description = editDescription.getText().toString().trim();
@@ -361,8 +351,8 @@ public class CreatePostActivity extends AppCompatActivity {
                 age, 
                 description, 
                 address, 
-                0.0,  // Simplified: not using actual coordinates for now
-                0.0
+                selectedLatitude,
+                selectedLongitude
             );
             
             Log.d(TAG, "Saving post to Firestore...");
